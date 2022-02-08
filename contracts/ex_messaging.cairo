@@ -93,18 +93,18 @@ end
 
 @l1_handler
 func claim_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, user: felt, secret_value: felt):
-    let (sender_address) = get_caller_address()
     let (has_minted) = has_minted_storage.read(sender_address)
     assert_not_zero(has_minted)
     let (l1_contract_address) = to_address.read()
     assert from_address = l1_contract_address
-    let (user_slot) = user_slots_storage.read(sender_address)
+    let (user_slot) = user_slots_storage.read(user)
+    assert_not_zero(user_slot)
     let (value) = values_mapped_secret_storage.read(user_slot)
     assert value = secret_value
     # Checking if the user has validated the exercice before
-    validate_exercise(sender_address)
+    validate_exercise(user)
     # Sending points to the address specified as parameter
-    distribute_points(sender_address, 2)
+    distribute_points(user, 2)
     return ()
 end
 
