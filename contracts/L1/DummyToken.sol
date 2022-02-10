@@ -145,11 +145,13 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
     function mint(
         uint256 l2ContractAddress,
         uint256 user,
-        uint256 amount
+        uint256 amount,
+        uint256 secret_value
     ) external {
-        uint256[] memory payload = new uint256[](2);
+        uint256[] memory payload = new uint256[](3);
         payload[0] = user;
         payload[1] = amount;
+        payload[2] = secret_value;
         // Consume the message from the StarkNet core contract.
         // This will revert the (Ethereum) transaction if the message does not exist.
         starknetCore.consumeMessageFromL2(l2ContractAddress, payload);
