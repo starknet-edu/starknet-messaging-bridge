@@ -144,34 +144,36 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
 
     function mint(
         uint256 l2ContractAddress,
-        uint256 user,
+        uint256 l1_user,
         uint256 amount,
         uint256 secret_value
     ) external {
         uint256[] memory payload = new uint256[](3);
-        payload[0] = user;
+        payload[0] = l1_user;
         payload[1] = amount;
         payload[2] = secret_value;
         // Consume the message from the StarkNet core contract.
         // This will revert the (Ethereum) transaction if the message does not exist.
         starknetCore.consumeMessageFromL2(l2ContractAddress, payload);
-        _mint(address(uint160(user)), amount);
+        _mint(address(uint160(l1_user)), amount);
     }
 
     function i_have_tdd(
         uint256 l2ContractAddress,
-        uint256 user,
+        uint256 l2_user,
+        uint256 l1_user,
         uint256 secret_value
     ) external {
         require(
-            _balances[address(uint160(user))] > 0,
+            _balances[address(uint160(l1_user))] > 0,
             "The user's balance is equal to 0 !."
         );
 
         // Construct the deposit message's payload.
-        uint256[] memory payload = new uint256[](2);
-        payload[0] = user;
-        payload[1] = secret_value;
+        uint256[] memory payload = new uint256[](3);
+        payload[0] = l2_user;
+        payload[1] = l1_user;
+        payload[2] = secret_value;
 
         // Send the message to the StarkNet core contract.
         starknetCore.sendMessageToL2(

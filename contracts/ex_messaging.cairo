@@ -41,7 +41,7 @@ func to_address() -> (to_address : felt):
 end
 
 @storage_var
-func has_minted_storage(account: felt) -> (has_minted: felt):
+func has_minted_storage(account: felt) -> (l1_user: felt):
 end
 
 
@@ -71,7 +71,7 @@ end
 # External functions
 #
 @external
-func mint_on_L1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(user: felt, amount: felt):
+func mint_on_L1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt, amount: felt):
     # Reading caller address
     let (sender_address) = get_caller_address()
     # Checking that the user got a slot assigned
@@ -79,7 +79,7 @@ func mint_on_L1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
     let (secret_value) = values_mapped_secret_storage.read(user_slot)
     assert_not_zero(user_slot)
     let (message_payload : felt*) = alloc()
-    assert message_payload[0] = user
+    assert message_payload[0] = l1_user
     assert message_payload[1] = amount
     assert message_payload[2] = secret_value + 32
     let (l1_contract_address) = to_address.read()
@@ -87,24 +87,24 @@ func mint_on_L1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
         to_address=l1_contract_address,
         payload_size=3,
         payload=message_payload)
-    has_minted_storage.write(sender_address, 1)
+    has_minted_storage.write(sender_address, l1_user)
     return()
 end
 
 @l1_handler
-func claim_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, user: felt, secret_value: felt):
-    let (has_minted) = has_minted_storage.read(sender_address)
+func claim_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt, secret_value: felt):
+    let (has_minted) = has_minted_storage.read(l2_user)
     assert_not_zero(has_minted)
     let (l1_contract_address) = to_address.read()
     assert from_address = l1_contract_address
-    let (user_slot) = user_slots_storage.read(user)
+    let (user_slot) = user_slots_storage.read(l2_user)
     assert_not_zero(user_slot)
     let (value) = values_mapped_secret_storage.read(user_slot)
     assert value = secret_value
     # Checking if the user has validated the exercice before
-    validate_exercise(user)
+    validate_exercise(l2_user, 0)
     # Sending points to the address specified as parameter
-    distribute_points(user, 2)
+    distribute_points(l2_user, 2)
     return ()
 end
 
