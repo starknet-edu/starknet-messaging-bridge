@@ -24,14 +24,16 @@ contract MessagingNft is ERC721, Ownable {
         CLAIM_SELECTOR = _claimSelector;
     }
 
-    function createNftFromL2(uint256 l2ContractAddress, uint256 owner) public {
+    function createNftFromL2(uint256 l2ContractAddress, uint256 l1_user)
+        public
+    {
         uint256[] memory payload = new uint256[](1);
-        payload[0] = owner;
+        payload[0] = l1_user;
         // Consume the message from the StarkNet core contract.
         // This will revert the (Ethereum) transaction if the message does not exist.
         starknetCore.consumeMessageFromL2(l2ContractAddress, payload);
         tokenCounter += 1;
-        _safeMint(address(uint160(owner)), tokenCounter);
+        _safeMint(address(uint160(l1_user)), tokenCounter);
     }
 
     function submitNft(uint256 l2ContractAddress, uint256 l2user) external {

@@ -52,7 +52,7 @@ func player_exercise_solution_storage(player_address: felt) -> (contract_address
 end
 
 @storage_var
-func l1_nft_address() -> (l1_nft_address : felt):
+func l1_nft_address_storage() -> (l1_nft_address : felt):
 end
 
 @storage_var
@@ -87,12 +87,10 @@ end
 # This function is called when the contract is deployed
 #
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    _tderc20_address : felt, 
-        _players_registry: felt, 
-        _workshop_id: felt):
-    ex_initializer(_tderc20_address, _players_registry, _workshop_id)
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_nft_address: felt):
+    #ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     # Hard coded value for now
+    l1_nft_address_storage.write(l1_nft_address)
     max_rank_storage.write(100)
     return ()
 end
@@ -111,32 +109,32 @@ func submit_exercise{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 
     # Assigning passed ERC20 as player ERC20
     player_exercise_solution_storage.write(sender_address, messaging_address)
-    has_been_paired.write(erc20_address, 1)
+    has_been_paired.write(messaging_address, 1)
 
     # Checking if player has validated this exercise before
-    let (has_validated) = has_validated_exercise(sender_address, 0)
+    #let (has_validated) = has_validated_exercise(sender_address, 0)
     # This is necessary because of revoked references. Don't be scared, they won't stay around for too long...
 
     tempvar syscall_ptr = syscall_ptr
     tempvar pedersen_ptr = pedersen_ptr
     tempvar range_check_ptr = range_check_ptr
 
-    if has_validated == 0:
+    #if has_validated == 0:
         # player has validated
-        validate_exercise(sender_address, 0)
+        #validate_exercise(sender_address, 0)
         # Sending points
         # setup points
         #distribute_points(sender_address, 2)
         # Deploying contract points
         #distribute_points(sender_address, 2)
 
-    end
+    #end
 
     return()
 end
 
 @external
-func create_l1_nft{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt):
+func ex1a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt):
     alloc_locals
 	# Reading caller address
 	let (sender_address) = get_caller_address()
@@ -145,18 +143,19 @@ func create_l1_nft{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check
     assert_not_zero(l1_user)
     l1_users_storage.write(sender_address, l1_user)
     IExerciseSolution.create_l1_nft_message(contract_address = submited_exercise_address, l1_user = l1_user)
+    return ()
 end
 
 @l1_handler
-func claim_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt):
-    let (l1_nft_address) = l1_nft_address.read()
+func ex1b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt):
+    let (l1_nft_address) = l1_nft_address_storage.read()
     assert from_address = l1_nft_address
     let (submited_l1_user) = l1_users_storage.read(l2_user)
     assert submited_l1_user = l1_user
     # Checking if the user has validated the exercice before
-    validate_exercise(user, 1)
+    #validate_exercise(user, 1)
     # Sending points to the address specified as parameter
-    distribute_points(user, 2)
+    #distribute_points(user, 2)
     return ()
 end
 
