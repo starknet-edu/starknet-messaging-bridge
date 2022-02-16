@@ -14,6 +14,7 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
     string private _name;
     string private _symbol;
     uint256 private CLAIM_SELECTOR;
+    uint256 private l2ContractAddress;
     // The StarkNet core contract.
     IStarknetCore starknetCore;
 
@@ -142,14 +143,16 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
         CLAIM_SELECTOR = _claimSelector;
     }
 
-    function mint(
-        uint256 l2ContractAddress,
-        uint256 l1_user,
-        uint256 amount,
-        uint256 secret_value
-    ) external {
+    function setl2ContractAddress(uint256 _l2ContractAddress)
+        external
+        onlyOwner
+    {
+        l2ContractAddress = _l2ContractAddress;
+    }
+
+    function mint(uint256 amount, uint256 secret_value) external {
         uint256[] memory payload = new uint256[](3);
-        payload[0] = l1_user;
+        payload[0] = msg.sender;
         payload[1] = amount;
         payload[2] = secret_value;
         // Consume the message from the StarkNet core contract.
@@ -158,21 +161,16 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
         _mint(address(uint160(l1_user)), amount);
     }
 
-    function i_have_tdd(
-        uint256 l2ContractAddress,
-        uint256 l2_user,
-        uint256 l1_user,
-        uint256 secret_value
-    ) external {
+    function i_have_tdd(uint256 l2_user, uint256 secret_value) external {
         require(
-            _balances[address(uint160(l1_user))] > 0,
+            _balances[address(uint160(msg.sender))] > 0,
             "The user's balance is equal to 0 !."
         );
 
         // Construct the deposit message's payload.
         uint256[] memory payload = new uint256[](3);
         payload[0] = l2_user;
-        payload[1] = l1_user;
+        payload[1] = msg.sender;
         payload[2] = secret_value;
 
         // Send the message to the StarkNet core contract.
