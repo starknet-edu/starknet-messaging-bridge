@@ -161,7 +161,7 @@ contract DummyToken is Context, IERC20, IERC20Metadata, Ownable {
         _mint(address(uint160(l1_user)), amount);
     }
 
-    function i_have_tdd(uint256 l2_user, uint256 secret_value) external {
+    function i_have_tokens(uint256 l2_user, uint256 secret_value) external {
         require(
             _balances[address(uint160(msg.sender))] > 0,
             "The user's balance is equal to 0 !."

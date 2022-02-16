@@ -1,3 +1,10 @@
+# In this exercice, you need to:
+# - Use a function to get assigned a private variable
+# - Use a function to mint ERC20 tokens on L1
+# - Consume message on L1 to get the tokens
+# - Show that you have the tokens to trigger points distribution on L2
+
+
 %lang starknet
 %builtins pedersen range_check
 
@@ -61,8 +68,12 @@ end
 #
 @constructor
 func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-        l1_contract_address : felt 
+        l1_contract_address : felt,
+        _tderc20_address : felt, 
+        _players_registry: felt, 
+        _workshop_id: felt
     ):
+    ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     to_address.write(l1_contract_address)
     return ()
 end
@@ -78,6 +89,7 @@ func mint_on_L1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_pt
     let (user_slot) = user_slots_storage.read(sender_address)
     let (secret_value) = values_mapped_secret_storage.read(user_slot)
     assert_not_zero(user_slot)
+    # Sending the Mint message.
     let (message_payload : felt*) = alloc()
     assert message_payload[0] = l1_user
     assert message_payload[1] = amount
@@ -93,8 +105,10 @@ end
 
 @l1_handler
 func claim_points{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt, secret_value: felt):
+    # Checking if the user has send the message
     let (has_minted) = has_minted_storage.read(l2_user)
     assert_not_zero(has_minted)
+    # Make sure the message was sent by the intended L1 contract
     let (l1_contract_address) = to_address.read()
     assert from_address = l1_contract_address
     let (user_slot) = user_slots_storage.read(l2_user)
