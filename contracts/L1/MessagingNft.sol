@@ -10,6 +10,7 @@ contract MessagingNft is ERC721, Ownable {
     uint256 public tokenCounter;
     IStarknetCore starknetCore;
     uint256 private CLAIM_SELECTOR;
+    uint256 private EvaluatorContractAddress;
 
     constructor(
         string memory _name,
@@ -24,33 +25,29 @@ contract MessagingNft is ERC721, Ownable {
         CLAIM_SELECTOR = _claimSelector;
     }
 
-    function createNftFromL2(uint256 l2ContractAddress, uint256 l1_user)
-        public
+    function setEvaluatorContractAddress(uint256 _evaluatorContractAddress)
+        external
+        onlyOwner
     {
-        uint256[] memory payload = new uint256[](1);
-        payload[0] = l1_user;
-        // Consume the message from the StarkNet core contract.
-        // This will revert the (Ethereum) transaction if the message does not exist.
-        starknetCore.consumeMessageFromL2(l2ContractAddress, payload);
-        tokenCounter += 1;
-        _safeMint(address(uint160(l1_user)), tokenCounter);
+        EvaluatorContractAddress = _evaluatorContractAddress;
     }
 
-    function submitNft(uint256 l2ContractAddress, uint256 l2user) external {
-        require(
-            balanceOf(msg.sender) > 0,
-            "The user's balance is equal to 0 !."
-        );
-
-        // Construct the deposit message's payload.
-        uint256[] memory payload = new uint256[](2);
-        payload[0] = l2user;
-        payload[1] = uint256(uint160(msg.sender));
+    function createNftFromL2(uint256 l2_user, uint256 playerL2Contract) public {
+        uint256[] memory payload = new uint256[](1);
+        payload[0] = uint256(uint160(msg.sender));
+        // Consume the message from the StarkNet core contract.
+        // This will revert the (Ethereum) transaction if the message does not exist.
+        starknetCore.consumeMessageFromL2(playerL2Contract, payload);
+        tokenCounter += 1;
+        _safeMint(address(uint160(msg.sender)), tokenCounter);
+        uint256[] memory sender_payload = new uint256[](2);
+        sender_payload[0] = l2_user;
+        sender_payload[1] = uint256(uint160(msg.sender));
         // Send the message to the StarkNet core contract.
         starknetCore.sendMessageToL2(
-            l2ContractAddress,
+            EvaluatorContractAddress,
             CLAIM_SELECTOR,
-            payload
+            sender_payload
         );
     }
 }

@@ -15,6 +15,7 @@ from contracts.utils.ex00_base import (
     only_teacher
 )
 from contracts.IExerciseSolution import IExerciseSolution
+from contracts.Il2nft import Il2nft
 from starkware.starknet.common.syscalls import (get_contract_address, get_caller_address)
 from starkware.cairo.common.uint256 import (
     Uint256, uint256_add, uint256_sub, uint256_le, uint256_lt, uint256_check, uint256_eq
@@ -56,6 +57,10 @@ func l1_nft_address_storage() -> (l1_nft_address : felt):
 end
 
 @storage_var
+func l2_nft_address_storage() -> (l2_nft_address : felt):
+end
+
+@storage_var
 func l1_users_storage(player_address: felt) -> (l1_user: felt):
 end
 
@@ -87,10 +92,11 @@ end
 # This function is called when the contract is deployed
 #
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_nft_address: felt):
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_nft_address: felt, l2_nft_address: felt):
     #ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     # Hard coded value for now
     l1_nft_address_storage.write(l1_nft_address)
+    l2_nft_address_storage.write(l2_nft_address)
     max_rank_storage.write(100)
     return ()
 end
@@ -152,6 +158,17 @@ func ex1b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(fro
     assert from_address = l1_nft_address
     let (submited_l1_user) = l1_users_storage.read(l2_user)
     assert submited_l1_user = l1_user
+    # Checking if the user has validated the exercice before
+    #validate_exercise(user, 1)
+    # Sending points to the address specified as parameter
+    #distribute_points(user, 2)
+    return ()
+end
+
+@l1_handler
+func ex2{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2_user: felt):
+    let (l2_nft_address) = l2_nft_address_storage.read()
+    Il2nft.mint_from_l1(contract_address = l2_nft_address, l2_user = l2_user)
     # Checking if the user has validated the exercice before
     #validate_exercise(user, 1)
     # Sending points to the address specified as parameter

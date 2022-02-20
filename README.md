@@ -63,6 +63,18 @@ Your tasks
 - Player has to write a L1 contract that sends messages to (F), which will mint an ERC721 token
 - (F) has a function with which users can submit an ERC721 token on L2 they received; and this mints tokens on L2 for them.
 
+### Sending a message to L1/L2 from L2/L1 (Implementation)
+- There is a contract on L1 (MessagingNft) that can mint an ERC721 token.
+- It can receive a message from any smart contract on L2, if the payload is formated correctly
+- Player has to write a L2 contract that sends messages to (MessagingNft), which will mint an ERC721 token
+- Player has to submit the L2 contract that sends message for the minting to the Evaluator Contract
+- Player has to call the ex1a from the evaluator contract with the correct fields
+- Player has to consume the Message on L1 (MessagingNft), the points are distributed automatically to the player on L2 after the mint
+- There is a contract on L2 (l2nft) that can mint an L2 ERC721 token.
+- Player has to write a L1 contract that sends messages to the evaluator contract, which will mint an ERC721 token
+- Player has to call ex2 on the evaluator contract
+
+
 
 ### Receiving a message on L1/L2 from L2/L1
 - There is a contract on L1 (I) and another on L2 (J)

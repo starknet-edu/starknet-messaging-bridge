@@ -25,6 +25,16 @@ from contracts.token.ERC721.ERC721_base import (
 func next_token_id_storage() -> (next_token_id: Uint256):
 end
 
+@storage_var
+func evaluator_address_storage() -> (evaluator_address: felt):
+end
+
+@storage_var
+func owner_storage() -> (owner_address: felt):
+end
+
+
+
 #
 # Constructor
 #
@@ -34,21 +44,33 @@ func constructor{
         syscall_ptr : felt*,
         pedersen_ptr : HashBuiltin*,
         range_check_ptr
-    }(name: felt, symbol: felt):
+    }(name: felt, symbol: felt, owner: felt):
     ERC721_initializer(name, symbol)
     let token_id : Uint256 = Uint256(1,0)
     next_token_id_storage.write(token_id)
+    owner_storage.write(owner)
     return ()
 end
 
-@l1_handler
-func mint_from_l1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt):
+@external
+func mint_from_l1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l2_user: felt):
+    alloc_locals
+    let (caller_address) = get_caller_address()
+    let (evaluator_address) = evaluator_address_storage.read()
+    assert caller_address = evaluator_address
     let token_id : Uint256 = next_token_id_storage.read()
     let one_as_uint256: Uint256 = Uint256(1,0)
     ERC721_mint(l2_user, token_id)
     let next_token_id : Uint256  = uint256_add(token_id, one_as_uint256)
     next_token_id_storage.write(next_token_id)
+    return()
 end
 
-
-
+@external
+func set_evaluator_address{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(evaluator_address: felt):
+    let (caller_address) = get_caller_address()
+    let (owner) = owner_storage.read()
+    assert caller_address = owner
+    evaluator_address_storage.write(evaluator_address)
+    return ()
+end
