@@ -20,6 +20,8 @@ from starkware.starknet.common.syscalls import (get_contract_address, get_caller
 from starkware.cairo.common.uint256 import (
     Uint256, uint256_add, uint256_sub, uint256_le, uint256_lt, uint256_check, uint256_eq
 )
+from starkware.cairo.common.alloc import alloc
+from starkware.starknet.common.messages import send_message_to_l1
 from contracts.token.ERC20.ITDERC20 import ITDERC20
 from contracts.token.ERC20.IERC20 import IERC20
 
@@ -27,22 +29,6 @@ from contracts.token.ERC20.IERC20 import IERC20
 # Declaring storage vars
 # Storage vars are by default not visible through the ABI. They are similar to "private" variables in Solidity
 #
-
-@storage_var
-func max_rank_storage() -> (max_rank: felt):
-end
-
-@storage_var
-func next_rank_storage() -> (next_rank: felt):
-end
-
-@storage_var
-func random_attributes_storage(column: felt, rank: felt) -> (value: felt):
-end
-
-@storage_var
-func assigned_rank_storage(player_address: felt) -> (rank: felt):
-end
 
 @storage_var
 func has_been_paired(contract_address: felt) -> (has_been_paired: felt):
@@ -64,15 +50,39 @@ end
 func l1_users_storage(player_address: felt) -> (l1_user: felt):
 end
 
+@storage_var
+func user_slots_storage(account: felt) -> (user_slots_storage: felt):
+end
+
+@storage_var
+func values_mapped_secret_storage(slot: felt) -> (values_mapped_secret_storage: felt):
+end
+
+@storage_var
+func next_slot() -> (next_slot: felt):
+end
+
+@storage_var
+func was_initialized() -> (was_initialized: felt):
+end
+
+@storage_var
+func l1_dummy_token_address() -> (to_address : felt):
+end
+
+@storage_var
+func has_minted_storage(account: felt) -> (l1_user: felt):
+end
+
 #
 # Declaring getters
 # Public variables should be declared explicitly with a getter
 #
 
 @view
-func next_rank{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}() -> (next_rank: felt):
-    let (next_rank) = next_rank_storage.read()
-    return (next_rank)
+func user_slots{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(account: felt) -> (user_slot: felt):
+    let (user_slot) = user_slots_storage.read(account)
+    return (user_slot)
 end
 
 @view
@@ -81,29 +91,63 @@ func player_exercise_solution{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, 
     return (contract_address)
 end
 
-@view
-func assigned_rank{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(player_address: felt) -> (rank: felt):
-    let (rank) = assigned_rank_storage.read(player_address)
-    return (rank)
-end
-
-
 ######### Constructor
 # This function is called when the contract is deployed
 #
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_nft_address: felt, l2_nft_address: felt):
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(dummy_token_address: felt, l1_nft_address: felt, l2_nft_address: felt):
     #ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     # Hard coded value for now
+    l1_dummy_token_address.write(dummy_token_address)
     l1_nft_address_storage.write(l1_nft_address)
     l2_nft_address_storage.write(l2_nft_address)
-    max_rank_storage.write(100)
     return ()
 end
 
 ######### External functions
 # These functions are callable by other contracts
 #
+
+@external
+func ex_0_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt, amount: felt):
+    # Reading caller address
+    let (sender_address) = get_caller_address()
+    # Checking that the user got a slot assigned
+    let (user_slot) = user_slots_storage.read(sender_address)
+    let (secret_value) = values_mapped_secret_storage.read(user_slot)
+    assert_not_zero(user_slot)
+    # Sending the Mint message.
+    let (message_payload : felt*) = alloc()
+    assert message_payload[0] = l1_user
+    assert message_payload[1] = amount
+    assert message_payload[2] = secret_value + 32
+    let (l1_contract_address) = l1_dummy_token_address.read()
+    send_message_to_l1(
+        to_address=l1_contract_address,
+        payload_size=3,
+        payload=message_payload)
+    has_minted_storage.write(sender_address, l1_user)
+    return()
+end
+
+@l1_handler
+func ex_0_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt, secret_value: felt):
+    # Checking if the user has send the message
+    let (has_minted) = has_minted_storage.read(l2_user)
+    assert_not_zero(has_minted)
+    # Make sure the message was sent by the intended L1 contract
+    let (l1_contract_address) = l1_dummy_token_address.read()
+    assert from_address = l1_contract_address
+    let (user_slot) = user_slots_storage.read(l2_user)
+    assert_not_zero(user_slot)
+    let (value) = values_mapped_secret_storage.read(user_slot)
+    assert value = secret_value
+    # Checking if the user has validated the exercice before
+    #validate_exercise(l2_user, 0)
+    # Sending points to the address specified as parameter
+    #distribute_points(l2_user, 2)
+    return ()
+end
 
 @external
 func submit_exercise{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(messaging_address: felt):
@@ -176,26 +220,18 @@ func ex2{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from
     return ()
 end
 
-#
-# Internal functions
-#
-
-func assign_rank_to_player{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(sender_address:felt):
-    alloc_locals
-
-    # Reading next available slot
-    let (next_rank) = next_rank_storage.read()
-    # Assigning to user
-    assigned_rank_storage.write(sender_address, next_rank)
-
-    let new_next_rank = next_rank + 1
-    let (max_rank) = max_rank_storage.read()
-
-    # Checking if we reach max_rank
-    if new_next_rank == max_rank:
-        next_rank_storage.write(0)
+@external
+func assign_user_slot{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # Reading caller address
+    let (sender_address) = get_caller_address()
+    let (next_slot_temp) = next_slot.read()
+    let (next_value) = values_mapped_secret_storage.read(next_slot_temp + 1)
+    if next_value == 0:
+        user_slots_storage.write(sender_address, 1)
+        next_slot.write(0)
     else:
-        next_rank_storage.write(new_next_rank)
+        user_slots_storage.write(sender_address, next_slot_temp + 1)
+        next_slot.write(next_slot_temp + 1)
     end
     return()
 end
@@ -206,13 +242,17 @@ end
 #
 
 @external
-func set_random_values{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(values_len: felt, values: felt*, column: felt):
-    only_teacher()
-    # Check that we fill max_ranK_storage cells
-    let (max_rank) = max_rank_storage.read()
-    assert values_len = max_rank
+func set_random_values{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(values_len: felt, values: felt*):
+    #only_teacher()
+    # Check if the random values were already initialized
+    let (was_initialized_read) = was_initialized.read()
+    assert was_initialized_read = 0
+    
     # Storing passed values in the store
-    set_a_random_value(values_len, values, column)
+    set_a_random_value(values_len, values)
+
+    # Mark that value store was initialized
+    was_initialized.write(1)
     return()
 end
 
@@ -221,15 +261,15 @@ end
 # Only admins can call these. You don't need to understand them to finish the exercise.
 #
 
-func set_a_random_value{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(values_len: felt, values: felt*, column: felt):
+func set_a_random_value{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(values_len: felt, values: felt*):
     if values_len == 0:
         # Start with sum=0.
         return ()
     end
 
 
-    set_a_random_value(values_len=values_len - 1, values=values + 1, column=column)
-    random_attributes_storage.write(column, values_len-1, [values])
+    set_a_random_value(values_len=values_len - 1, values=values + 1 )
+    values_mapped_secret_storage.write(values_len-1, [values])
 
     return ()
 end
