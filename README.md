@@ -53,6 +53,13 @@ Your tasks
 - (A) receives a message, sent by account (C) through (B) on L2, with two parameters: the receiver address (D) and the amount of tokens to mint.
 - Once he receives tokens, (C) calls (A) on L1 to show he received the tokens properly (he has the tokens, and the message was consumed). This triggers a message from (A) to (B) which distribute points on L2 to (C)
 
+### Sending a message to L1, and back (Implementation)
+- Use a function to get assigned a private variable on the Evaluator
+- Use a function to mint ERC20 tokens on L1 
+- Consume message on L1 to get the tokens
+- Show that you have the tokens to trigger points distribution on L2
+
+
 ### Sending a message to L1/L2 from L2/L1
 - There is a contract on L1 (E) that can mint an ERC721 token.
 - It can receive a message from any smart contract on L2, if the payload is formated correctly
