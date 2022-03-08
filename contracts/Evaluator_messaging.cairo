@@ -71,6 +71,14 @@ func l1_dummy_token_address() -> (to_address : felt):
 end
 
 @storage_var
+func l1_evaluator_address_storage() -> (l1_evaluator_address : felt):
+end
+
+@storage_var
+func assigned_rand_var_storage(l2_contract: felt) -> (assigned_rand_var:felt):
+end
+
+@storage_var
 func has_minted_storage(account: felt) -> (l1_user: felt):
 end
 
@@ -95,12 +103,13 @@ end
 # This function is called when the contract is deployed
 #
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(dummy_token_address: felt, l1_nft_address: felt, l2_nft_address: felt):
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(dummy_token_address: felt, l1_nft_address: felt, l2_nft_address: felt, l1_evaluator_address: felt):
     #ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     # Hard coded value for now
     l1_dummy_token_address.write(dummy_token_address)
     l1_nft_address_storage.write(l1_nft_address)
     l2_nft_address_storage.write(l2_nft_address)
+    l1_evaluator_address_storage.write(l1_evaluator_address)
     return ()
 end
 
@@ -217,6 +226,47 @@ func ex2{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from
     #validate_exercise(user, 1)
     # Sending points to the address specified as parameter
     #distribute_points(user, 2)
+    return ()
+end
+
+@external
+func ex3_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1PlayerContract: felt):
+    let (sender_address) = get_caller_address()
+    let (message_payload : felt*) = alloc()
+    assert message_payload[0] = sender_address
+    send_message_to_l1(
+        to_address=l1PlayerContract,
+        payload_size=1,
+        payload=message_payload)
+    return ()
+end
+
+@l1_handler
+func ex3_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2_user: felt):
+    # Checking if the user has validated the exercice before
+    #validate_exercise(user, 1)
+    # Sending points to the address specified as parameter
+    #distribute_points(user, 2)
+    return ()
+end
+
+@l1_handler
+func ex4_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2ReceiverContract: felt, rand_value: felt):
+    let (l1_evaluator_address) = l1_evaluator_address_storage.read()
+    assert from_address = l1_evaluator_address
+    assigned_rand_var_storage.write(l2ReceiverContract, rand_value)
+    return ()
+end
+
+@external
+func ex4_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
+    # Reading caller address
+	let (sender_address) = get_caller_address()
+	# Retrieve exercise address
+	let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
+    let (assigned_var) = assigned_rand_var_storage.read(submited_exercise_address)
+    let (value) = IExerciseSolution.l1_assigned_var(contract_address = player_contract)
+    assert value = assigned_var
     return ()
 end
 
