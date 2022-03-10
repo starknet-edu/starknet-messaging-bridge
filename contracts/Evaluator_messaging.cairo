@@ -265,7 +265,7 @@ func ex4_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
 	# Retrieve exercise address
 	let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
     let (assigned_var) = assigned_rand_var_storage.read(submited_exercise_address)
-    let (value) = IExerciseSolution.l1_assigned_var(contract_address = player_contract)
+    let (value) = IExerciseSolution.l1_assigned_var(contract_address = submited_exercise_address)
     assert value = assigned_var
     return ()
 end

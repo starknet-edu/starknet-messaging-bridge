@@ -49,9 +49,9 @@ contract Evaluator is Ownable {
         uint256 consumed = starknetCore.l2ToL1Messages(msgHash);
         require(consumed > 0, "The message is not present on the proxy");
         playerSolution.consumeMessage(l2Evaluator, l2User);
-        consumed = starknetCore.l2ToL1Messages(msgHash);
+        uint256 after_consumed = starknetCore.l2ToL1Messages(msgHash);
         require(
-            consumed == (consumed - 1),
+            after_consumed == (consumed - 1),
             "The message is not consumed yet !"
         );
         starknetCore.sendMessageToL2(l2Evaluator, ex3_b_selector, payload);
@@ -60,7 +60,11 @@ contract Evaluator is Ownable {
     function ex4(uint256 l2ReceiverContract, uint256 solution_selector)
         external
     {
-        uint256 rand_value = uint256(blockhash(block.number - 1));
+        uint256 rand_value = uint160(
+            uint256(
+                keccak256(abi.encodePacked(block.difficulty, block.timestamp))
+            )
+        );
         uint256[] memory payload = new uint256[](2);
         payload[0] = l2ReceiverContract;
         payload[1] = rand_value;
