@@ -78,7 +78,6 @@ https://github.com/l-henri/StarkNet-graffiti
 https://twitter.com/HenriLieutaud/status/1466324729829154822
 
 ## Exercises & Contract addresses 
-To be updated after deployment
 ​|Contract code|Contract on voyager|
 |---|---|
 |[Points counter ERC20](contracts/token/ERC20/TDERC20.cairo)|[0x06334ec396a4110ace68be4ff5d1579af2042abebae12632e32fc567bc461ed1](https://goerli.voyager.online/contract/0x06334ec396a4110ace68be4ff5d1579af2042abebae12632e32fc567bc461ed1)|
