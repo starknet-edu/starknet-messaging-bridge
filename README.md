@@ -78,11 +78,11 @@ https://github.com/l-henri/StarkNet-graffiti
 https://twitter.com/HenriLieutaud/status/1466324729829154822
 
 ## Exercises & Contract addresses 
-​|Contract code|Contract on voyager|
+|Contract code|Contract on voyager|
 |---|---|
 |[Points counter ERC20](contracts/token/ERC20/TDERC20.cairo)|[0x06334ec396a4110ace68be4ff5d1579af2042abebae12632e32fc567bc461ed1](https://goerli.voyager.online/contract/0x06334ec396a4110ace68be4ff5d1579af2042abebae12632e32fc567bc461ed1)|
 |[L2 Evaluator](contracts/Evaluator.cairo)|[0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)|
 |[l2nft](contracts/l2nft.cairo)|[0x03fee3d8ed3c3f139aee59658402f5e1e132caf9bd9d13c6f767024a824f7470](https://goerli.voyager.online/contract/0x03fee3d8ed3c3f139aee59658402f5e1e132caf9bd9d13c6f767024a824f7470)|
 |[L1 Dummy token](contracts/L1/DummyToken.sol)|[0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)|
 |[L1 Messaging NFT](contracts/L1/MessagingNft.sol)|[0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)|
-​|[L1 Evaluator](contracts/L1/Evaluator.sol)|[0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)|
+|[L1 Evaluator](contracts/L1/Evaluator.sol)|[0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)|
