@@ -68,14 +68,14 @@ Your points will get credited in Argent X; though this may take some time. If yo
 - Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)
 - Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution
 ### Receiving a message on L2 from L1
-- Player has to create a L2 contract that can receive message from [L1 Evaluator]https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to set the random value assigned on the message
+- Player has to create a L2 contract that can receive message from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to set the random value assigned on the message
 - Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) in order to get the points
 
 Useful resources
-https://starknet.io/documentation/l1-l2-messaging/#l1-l2-messaging
-https://starknet.io/docs/hello_starknet/l1l2.html
-https://github.com/l-henri/StarkNet-graffiti
-https://twitter.com/HenriLieutaud/status/1466324729829154822
+https://starknet.io/documentation/l1-l2-messaging/#l1-l2-messaging  
+https://starknet.io/docs/hello_starknet/l1l2.html  
+https://github.com/l-henri/StarkNet-graffiti  
+https://twitter.com/HenriLieutaud/status/1466324729829154822  
 
 ## Exercises & Contract addresses 
 |Contract code|Contract on voyager|
