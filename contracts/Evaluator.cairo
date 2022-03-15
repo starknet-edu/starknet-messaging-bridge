@@ -1,4 +1,4 @@
-######### Messaging bridge evaluator
+# ######## Messaging bridge evaluator
 
 %lang starknet
 %builtins pedersen range_check
@@ -7,23 +7,14 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin
 from starkware.cairo.common.math import assert_not_zero
 
 from contracts.utils.ex00_base import (
-    tuto_erc20_address,
-    ex_initializer,
-    has_validated_exercise,
-    validate_and_distribute_points_once,
-    only_teacher,
-    teacher_accounts,
-    assigned_rank,
-    assign_rank_to_player,
-    random_attributes_storage,
-    max_rank_storage
-)
+    tuto_erc20_address, ex_initializer, has_validated_exercise, validate_and_distribute_points_once,
+    only_teacher, teacher_accounts, assigned_rank, assign_rank_to_player, random_attributes_storage,
+    max_rank_storage)
 from contracts.IExerciseSolution import IExerciseSolution
 from contracts.Il2nft import Il2nft
-from starkware.starknet.common.syscalls import (get_contract_address, get_caller_address)
+from starkware.starknet.common.syscalls import get_contract_address, get_caller_address
 from starkware.cairo.common.uint256 import (
-    Uint256, uint256_add, uint256_sub, uint256_le, uint256_lt, uint256_check, uint256_eq
-)
+    Uint256, uint256_add, uint256_sub, uint256_le, uint256_lt, uint256_check, uint256_eq)
 from starkware.cairo.common.alloc import alloc
 from starkware.starknet.common.messages import send_message_to_l1
 from contracts.token.ERC20.ITDERC20 import ITDERC20
@@ -35,11 +26,11 @@ from contracts.token.ERC20.IERC20 import IERC20
 #
 
 @storage_var
-func has_been_paired(contract_address: felt) -> (has_been_paired: felt):
+func has_been_paired(contract_address : felt) -> (has_been_paired : felt):
 end
 
 @storage_var
-func player_exercise_solution_storage(player_address: felt) -> (contract_address: felt):
+func player_exercise_solution_storage(player_address : felt) -> (contract_address : felt):
 end
 
 @storage_var
@@ -51,7 +42,7 @@ func l2_nft_address_storage() -> (l2_nft_address : felt):
 end
 
 @storage_var
-func l1_users_storage(player_address: felt) -> (l1_user: felt):
+func l1_users_storage(player_address : felt) -> (l1_user : felt):
 end
 
 @storage_var
@@ -63,14 +54,12 @@ func l1_evaluator_address_storage() -> (l1_evaluator_address : felt):
 end
 
 @storage_var
-func assigned_rand_var_storage(l2_contract: felt) -> (assigned_rand_var:felt):
+func assigned_rand_var_storage(l2_contract : felt) -> (assigned_rand_var : felt):
 end
 
 @storage_var
-func has_minted_storage(account: felt) -> (l1_user: felt):
+func has_minted_storage(account : felt) -> (l1_user : felt):
 end
-
-
 
 #
 # Declaring getters
@@ -78,16 +67,20 @@ end
 #
 
 @view
-func player_exercise_solution{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(player_address: felt) -> (contract_address: felt):
+func player_exercise_solution{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        player_address : felt) -> (contract_address : felt):
     let (contract_address) = player_exercise_solution_storage.read(player_address)
     return (contract_address)
 end
 
-######### Constructor
+# ######## Constructor
 # This function is called when the contract is deployed
 #
 @constructor
-func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(_tderc20_address : felt, _players_registry: felt, _workshop_id: felt, dummy_token_address: felt, l1_nft_address: felt, l2_nft_address: felt, l1_evaluator_address: felt, _first_teacher:felt):
+func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        _tderc20_address : felt, _players_registry : felt, _workshop_id : felt,
+        dummy_token_address : felt, l1_nft_address : felt, l2_nft_address : felt,
+        l1_evaluator_address : felt, _first_teacher : felt):
     ex_initializer(_tderc20_address, _players_registry, _workshop_id)
     # Hard coded value for now
     max_rank_storage.write(100)
@@ -99,35 +92,34 @@ func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_p
     return ()
 end
 
-######### External functions
+# ######## External functions
 # These functions are callable by other contracts
 #
 
 @external
-func ex_0_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt, amount: felt):
+func ex_0_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        l1_user : felt, amount : felt):
     alloc_locals
     # Reading caller address
     let (sender_address) = get_caller_address()
     # Checking that the user got a slot assigned
     assign_rank_to_player(sender_address)
     let (rank) = assigned_rank(sender_address)
-    let (secret_value) = random_attributes_storage.read(0, rank)
+    let (secret_value) = random_attributes_storage.read(rank, 0)
     # Sending the Mint message.
     let (message_payload : felt*) = alloc()
     assert message_payload[0] = l1_user
     assert message_payload[1] = amount
     assert message_payload[2] = secret_value + 32
     let (l1_contract_address) = l1_dummy_token_address.read()
-    send_message_to_l1(
-        to_address=l1_contract_address,
-        payload_size=3,
-        payload=message_payload)
+    send_message_to_l1(to_address=l1_contract_address, payload_size=3, payload=message_payload)
     has_minted_storage.write(sender_address, l1_user)
-    return()
+    return ()
 end
 
 @l1_handler
-func ex_0_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt, secret_value: felt):
+func ex_0_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        from_address : felt, l2_user : felt, l1_user : felt, secret_value : felt):
     # Checking if the user has send the message
     let (has_minted) = has_minted_storage.read(l2_user)
     assert_not_zero(has_minted)
@@ -135,23 +127,24 @@ func ex_0_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(f
     let (l1_contract_address) = l1_dummy_token_address.read()
     assert from_address = l1_contract_address
     let (rank) = assigned_rank(l2_user)
-    let (value) = random_attributes_storage.read(0, rank)
+    let (value) = random_attributes_storage.read(rank, 0)
     assert value = secret_value
     validate_and_distribute_points_once(l2_user, 0, 2)
     return ()
 end
 
 @external
-func submit_exercise{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(erc20_address: felt):
+func submit_exercise{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        solution_address : felt):
     # Reading caller address
     let (sender_address) = get_caller_address()
     # Checking this contract was not used by another group before
-    let (has_solution_been_submitted_before) = has_been_paired.read(erc20_address)
+    let (has_solution_been_submitted_before) = has_been_paired.read(solution_address)
     assert has_solution_been_submitted_before = 0
 
     # Assigning passed ERC20 as player ERC20
-    player_exercise_solution_storage.write(sender_address, erc20_address)
-    has_been_paired.write(erc20_address, 1)
+    player_exercise_solution_storage.write(sender_address, solution_address)
+    has_been_paired.write(solution_address, 1)
 
     # Checking if player has validated this exercise before
     let (has_validated) = has_validated_exercise(sender_address, 0)
@@ -163,33 +156,34 @@ func submit_exercise{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_che
 
     if has_validated == 0:
         # player has validated
-        #validate_exercise(sender_address, 0)
+        # validate_exercise(sender_address, 0)
         # Sending points
         # setup points
-        #distribute_points(sender_address, 2)
+        # distribute_points(sender_address, 2)
         # Deploying contract points
-        #distribute_points(sender_address, 2)
-
+        # distribute_points(sender_address, 2)
     end
 
-    return()
+    return ()
 end
 
 @external
-func ex1a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user: felt):
+func ex1a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1_user : felt):
     alloc_locals
-	# Reading caller address
-	let (sender_address) = get_caller_address()
-	# Retrieve exercise address
-	let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
+    # Reading caller address
+    let (sender_address) = get_caller_address()
+    # Retrieve exercise address
+    let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
     assert_not_zero(l1_user)
     l1_users_storage.write(sender_address, l1_user)
-    IExerciseSolution.create_l1_nft_message(contract_address = submited_exercise_address, l1_user = l1_user)
+    IExerciseSolution.create_l1_nft_message(
+        contract_address=submited_exercise_address, l1_user=l1_user)
     return ()
 end
 
 @l1_handler
-func ex1b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address : felt, l2_user: felt, l1_user: felt):
+func ex1b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        from_address : felt, l2_user : felt, l1_user : felt):
     let (l1_nft_address) = l1_nft_address_storage.read()
     assert from_address = l1_nft_address
     let (submited_l1_user) = l1_users_storage.read(l2_user)
@@ -199,27 +193,27 @@ func ex1b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(fro
 end
 
 @l1_handler
-func ex2{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2_user: felt):
+func ex2{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        from_address : felt, l2_user : felt):
     let (l2_nft_address) = l2_nft_address_storage.read()
-    Il2nft.mint_from_l1(contract_address = l2_nft_address, l2_user = l2_user)
+    Il2nft.mint_from_l1(contract_address=l2_nft_address, l2_user=l2_user)
     validate_and_distribute_points_once(l2_user, 2, 2)
     return ()
 end
 
 @external
-func ex3_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(l1PlayerContract: felt):
+func ex3_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        l1PlayerContract : felt):
     let (sender_address) = get_caller_address()
     let (message_payload : felt*) = alloc()
     assert message_payload[0] = sender_address
-    send_message_to_l1(
-        to_address=l1PlayerContract,
-        payload_size=1,
-        payload=message_payload)
+    send_message_to_l1(to_address=l1PlayerContract, payload_size=1, payload=message_payload)
     return ()
 end
 
 @l1_handler
-func ex3_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2_user: felt):
+func ex3_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        from_address : felt, l2_user : felt):
     let (l1_evaluator_address) = l1_evaluator_address_storage.read()
     assert from_address = l1_evaluator_address
     validate_and_distribute_points_once(l2_user, 3, 2)
@@ -227,7 +221,8 @@ func ex3_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(fr
 end
 
 @l1_handler
-func ex4_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(from_address: felt, l2ReceiverContract: felt, rand_value: felt):
+func ex4_a{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+        from_address : felt, l2ReceiverContract : felt, rand_value : felt):
     let (l1_evaluator_address) = l1_evaluator_address_storage.read()
     assert from_address = l1_evaluator_address
     assigned_rand_var_storage.write(l2ReceiverContract, rand_value)
@@ -237,11 +232,11 @@ end
 @external
 func ex4_b{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}():
     # Reading caller address
-	let (sender_address) = get_caller_address()
-	# Retrieve exercise address
-	let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
+    let (sender_address) = get_caller_address()
+    # Retrieve exercise address
+    let (submited_exercise_address) = player_exercise_solution_storage.read(sender_address)
     let (assigned_var) = assigned_rand_var_storage.read(submited_exercise_address)
-    let (value) = IExerciseSolution.l1_assigned_var(contract_address = submited_exercise_address)
+    let (value) = IExerciseSolution.l1_assigned_var(contract_address=submited_exercise_address)
     assert value = assigned_var
     validate_and_distribute_points_once(sender_address, 4, 2)
     return ()
