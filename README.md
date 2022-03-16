@@ -149,6 +149,9 @@ nile compile
 | [L1 Dummy token](contracts/L1/DummyToken.sol)               | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                    |
 | [L1 Messaging NFT](contracts/L1/MessagingNft.sol)           | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                    |
 
+
+[Goerli faucet](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#writeContract) (0.1 ether every 2 hours)
+
 ## Points list
 
 ### Sending a message to L1, and back
