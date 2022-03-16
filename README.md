@@ -42,15 +42,112 @@ And if you struggle to move forward, do let us know! This workshop is meant to b
 Do you have a question? Join our [Discord server](https://discord.gg/YHz7drT3), register and join channel #tutorials-support
 ​
 
-## How to work on this TD
+## Table of contents
+
+- [StarkNet messaging bridge](#starknet-messaging-bridge)
+  - [Introduction](#introduction)
+    - [Disclaimer](#disclaimer)
+    - [Providing feedback](#providing-feedback)
+  - [Table of contents](#table-of-contents)
+  - [How to work on this tutorial](#how-to-work-on-this-tutorial)
+    - [Before you start](#before-you-start)
+      - [L2](#l2)
+      - [L1](#l1)
+    - [Counting your points](#counting-your-points)
+      - [Transaction status](#transaction-status)
+      - [Install nile](#install-nile)
+        - [With pip](#with-pip)
+        - [With docker](#with-docker)
+    - [Getting to work](#getting-to-work)
+  - [Exercises & Contract addresses](#exercises--contract-addresses)
+  - [Points list](#points-list)
+    - [Sending a message to L1, and back](#sending-a-message-to-l1-and-back)
+    - [Sending a message to L1 from L2 (Implementation)](#sending-a-message-to-l1-from-l2-implementation)
+    - [Sending a message to L2 from L1](#sending-a-message-to-l2-from-l1)
+    - [Receiving a message on L1 from L2](#receiving-a-message-on-l1-from-l2)
+    - [Receiving a message on L2 from L1](#receiving-a-message-on-l2-from-l1)
+
+## How to work on this tutorial
+
+### Before you start
+
+L2 -> L1 communication takes ~30 mins so it is recommended to send the messages from L2 to L1 as soon as possible and to do the exercises on L1 in the meantime.
+
+The tutorial has multiple components:
+
+#### L2
+
+- An [evaluator contract](contracts/Evaluator.cairo), that is able to mint and distribute `L1L2-101` points
+- An [ERC20 token](contracts/token/ERC20/TUTOERC20.cairo), ticker `L1L2-101`, that is used to keep track of points
+- An [ERC721 token](contracts/l2nft.cairo), "L2 nft", ticker `L2NFT`
+
+#### L1
+
+- An [evaluator contract](contracts/L1/Evaluator.sol), that will communicate with the evaluator on L2
+- An [ERC20 token](contracts/L1/DummyToken.sol), ticker `TDD`
+- An [ERC721 token](contracts/L1/MessagingNft.sol), "L2 nft", ticker `MNT`
 
 ### Counting your points
 
 Your points will get credited in Argent X; though this may take some time. If you want to monitor your points count in real time, you can also see your balance in voyager!
 ​
 
-- Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x06334ec396a4110ace68be4ff5d1579af2042abebae12632e32fc567bc461ed1#readContract)  in voyager, in the "read contract" tab
+- Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9#readContract)  in voyager, in the "read contract" tab
 - Enter your address in decimal in the "balanceOf" function
+
+#### Transaction status
+
+You sent a transaction, and it is shown as "undetected" in voyager? This can mean two things:
+
+- Your transaction is pending, and will be included in a block shortly. It will then be visible in voyager.
+- Your transaction was invalid, and will NOT be included in a block (there is no such thing as a failed transaction in StarkNet).
+
+You can (and should) check the status of your transaction with the following URL  [https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=](https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=) , where you can append your transaction hash.
+
+#### Install nile
+
+##### With pip
+
+- Set up the environment following [these instructions](https://starknet.io/docs/quickstart.html#quickstart)
+- Install [Nile](https://github.com/OpenZeppelin/nile).
+
+##### With docker
+
+- Linux and macos
+
+```bash
+alias nile='docker run --rm -v "$PWD":"$PWD" -w "$PWD" lucaslvy/nile:0.8.0-x86'
+```
+
+for M1 macs you can use this image instead `lucaslvy/nile:0.8.0-arm`
+
+- Windows
+
+```powershell
+docker run --rm -it -v ${pwd}:/work --workdir /work lucaslvy/nile:0.8.0-x86
+```
+
+### Getting to work
+
+- Clone the repo on your machine
+- Test that you are able to compile the project
+
+```bash
+nile compile
+```
+
+- To convert data to felt use the [`utils.py`](utils.py) script
+
+## Exercises & Contract addresses
+
+| Contract code                                               | Contract on voyager                                                                                                                                                             |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [L2 Evaluator](contracts/Evaluator.cairo)                   | [0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)   |
+| [Points counter ERC20](contracts/token/ERC20/TDERC20.cairo) | [0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9) |
+| [l2nft](contracts/l2nft.cairo)                              | [0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00](https://goerli.voyager.online/contract/0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00) |
+| [L1 Evaluator](contracts/L1/Evaluator.sol)                  | [0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)                                                    |
+| [L1 Dummy token](contracts/L1/DummyToken.sol)               | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                    |
+| [L1 Messaging NFT](contracts/L1/MessagingNft.sol)           | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                    |
 
 ## Points list
 
@@ -58,7 +155,7 @@ Your points will get credited in Argent X; though this may take some time. If yo
 
 - Use a function (ex_0_a) of the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) to mint ERC20 tokens on L1
 - Mint tokens on L1 [DummyToken](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395) by consuming the message with the secret value
-- Show that you have the tokens to trigger points distribution on L2
+- Show that you have the tokens to trigger points distribution on L2 (2 pts)
 
 ### Sending a message to L1 from L2 (Implementation)
 
@@ -67,37 +164,26 @@ Your points will get credited in Argent X; though this may take some time. If yo
 - Player has to write a L2 contract that sends messages to (MessagingNft), which will mint an ERC721 token
 - Player has to submit the L2 contract that sends message for the minting to the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)
 - Player has to call the ex1a() from the evaluator
-- Player has to consume the Message on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), the points are distributed automatically to the player on L2 after the mint
+- Player has to consume the Message on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), the points are distributed automatically to the player on L2 after the mint (2 pts)
 
 ### Sending a message to L2 from L1
 
 - There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x03fee3d8ed3c3f139aee59658402f5e1e132caf9bd9d13c6f767024a824f7470) that can mint an L2 ERC721 token.
-- Player has to write a L1 contract that sends messages to the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b), which will mint an ERC721 token
+- Player has to write a L1 contract that sends messages to the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b), which will mint an ERC721 token (2 pts)
 
 ### Receiving a message on L1 from L2
 
 - Player has to write a L1 contract that consume message from L2
 - Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)
-- Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution
+- Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution (2 pts)
 
 ### Receiving a message on L2 from L1
 
 - Player has to create a L2 contract that can receive message from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to set the random value assigned on the message
-- Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) in order to get the points
+- Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) in order to get the points (2 pts)
 
 Useful resources
 <https://starknet.io/documentation/l1-l2-messaging/#l1-l2-messaging>  
 <https://starknet.io/docs/hello_starknet/l1l2.html>  
 <https://github.com/l-henri/StarkNet-graffiti>  
 <https://twitter.com/HenriLieutaud/status/1466324729829154822>  
-
-## Exercises & Contract addresses
-
-| Contract code                                               | Contract on voyager                                                                                                                                                             |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Points counter ERC20](contracts/token/ERC20/TDERC20.cairo) | [0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9) |
-| [L2 Evaluator](contracts/Evaluator.cairo)                   | [0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)   |
-| [l2nft](contracts/l2nft.cairo)                              | [0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00](https://goerli.voyager.online/contract/0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00) |
-| [L1 Dummy token](contracts/L1/DummyToken.sol)               | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                    |
-| [L1 Messaging NFT](contracts/L1/MessagingNft.sol)           | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                    |
-| [L1 Evaluator](contracts/L1/Evaluator.sol)                  | [0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)                                                    |
