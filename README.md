@@ -153,28 +153,28 @@ nile compile
 
 ### Sending a message to L1, and back
 
-- Use a function (ex_0_a) of the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) to mint ERC20 tokens on L1
+- Use a function (ex_0_a) of the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639) to mint ERC20 tokens on L1
 - Mint tokens on L1 [DummyToken](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395) by consuming the message with the secret value
-- Show that you have the tokens to trigger points distribution on L2 (2 pts)
+- Show that you have the tokens (`i_have_tokens`) to trigger points distribution on L2 (2 pts)
 
 ### Sending a message to L1 from L2 (Implementation)
 
-- There is a contract on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) that can mint an ERC721 token.
-- It can receive a message from any smart contract on L2, if the payload is formated correctly
+- There is a contract on [L1 MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) that can mint an ERC721 token.
+- It can receive any message from any smart contract on L2, if the payload is formated correctly
 - Player has to write a L2 contract that sends messages to (MessagingNft), which will mint an ERC721 token
-- Player has to submit the L2 contract that sends message for the minting to the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)
+- Player has to submit the L2 contract that sends message for the minting to the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)
 - Player has to call the ex1a() from the evaluator
 - Player has to consume the Message on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), the points are distributed automatically to the player on L2 after the mint (2 pts)
 
 ### Sending a message to L2 from L1
 
-- There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x03fee3d8ed3c3f139aee59658402f5e1e132caf9bd9d13c6f767024a824f7470) that can mint an L2 ERC721 token.
-- Player has to write a L1 contract that sends messages to the [Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b), which will mint an ERC721 token (2 pts)
+- There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00) that can mint an L2 ERC721 token.
+- Player has to write a L1 contract that sends messages to the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639), which will mint an ERC721 token (2 pts)
 
 ### Receiving a message on L1 from L2
 
-- Player has to write a L1 contract that consume message from L2
-- Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b)
+- Player has to write a L1 contract that consumes messages from L2
+- Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)
 - Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution (2 pts)
 
 ### Receiving a message on L2 from L1
