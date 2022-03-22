@@ -142,9 +142,9 @@ nile compile
 
 | Contract code                                               | Contract on voyager                                                                                                                                                             |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [L2 Evaluator](contracts/Evaluator.cairo)                   | [0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)   |
+| [L2 Evaluator](contracts/Evaluator.cairo)                   | [0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)   |
 | [Points counter ERC20](contracts/token/ERC20/TDERC20.cairo) | [0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9) |
-| [l2nft](contracts/l2nft.cairo)                              | [0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00](https://goerli.voyager.online/contract/0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00) |
+| [l2nft](contracts/l2nft.cairo)                              | [0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314](https://goerli.voyager.online/contract/0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314) |
 | [L1 Evaluator](contracts/L1/Evaluator.sol)                  | [0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)                                                    |
 | [L1 Dummy token](contracts/L1/DummyToken.sol)               | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                    |
 | [L1 Messaging NFT](contracts/L1/MessagingNft.sol)           | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                    |
@@ -156,7 +156,7 @@ StarkNet Core contract: 0xde29d060D45901Fb19ED6C6e959EB22d8626708e
 
 ### Sending a message to L1, and back
 
-- Use a function (ex_0_a) of the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639) to mint ERC20 tokens on L1
+- Use a function (ex_0_a) of the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6) to mint ERC20 tokens on L1
 - Mint tokens on L1 [DummyToken](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395) by consuming the message with the secret value
 - Show that you have the tokens (`i_have_tokens`) to trigger points distribution on L2 (2 pts)
 
@@ -165,25 +165,25 @@ StarkNet Core contract: 0xde29d060D45901Fb19ED6C6e959EB22d8626708e
 - There is a contract on [L1 MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) that can mint an ERC721 token.
 - It can receive any message from any smart contract on L2, if the payload is formated correctly
 - Player has to write a L2 contract that sends messages to (MessagingNft), which will mint an ERC721 token
-- Player has to submit the L2 contract that sends message for the minting to the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)
+- Player has to submit the L2 contract that sends message for the minting to the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
 - Player has to call the ex1a() from the evaluator
 - Player has to consume the Message on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), the points are distributed automatically to the player on L2 after the mint (2 pts)
 
 ### Sending a message to L2 from L1
 
-- There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x07580ca4a09e40ab111e8ad0193013c3bf087cc3107c44e34257a454bb41ab00) that can mint an L2 ERC721 token.
-- Player has to write a L1 contract that sends messages to the [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639), which will mint an ERC721 token (2 pts)
+- There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314) that can mint an L2 ERC721 token.
+- Player has to write a L1 contract that sends messages to the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6), which will mint an ERC721 token (2 pts)
 
 ### Receiving a message on L1 from L2
 
 - Player has to write a L1 contract that consumes messages from L2
-- Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x04f241ef75f23fca94d00e5d0de788f4d6241ce71ff9f4d18fe27379b6f20639)
+- Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
 - Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution (2 pts)
 
 ### Receiving a message on L2 from L1
 
 - Player has to create a L2 contract that can receive message from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to set the random value assigned on the message
-- Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x195bcd27328405ef78ddc6c47b2258705dfa3bea21f7e887e66475664b84c5b) in order to get the points (2 pts)
+- Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6) in order to get the points (2 pts)
 
 Useful resources
 <https://starknet.io/documentation/l1-l2-messaging/#l1-l2-messaging>  

@@ -122,7 +122,7 @@ func mint_from_l1{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_
     let token_id : Uint256 = next_token_id_storage.read()
     let one_as_uint256 : Uint256 = Uint256(1, 0)
     ERC721_mint(l2_user, token_id)
-    let next_token_id : Uint256 = uint256_add(token_id, one_as_uint256)
+    let (next_token_id : Uint256, _) = uint256_add(token_id, one_as_uint256)
     next_token_id_storage.write(next_token_id)
     return ()
 end
