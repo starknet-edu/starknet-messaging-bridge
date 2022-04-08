@@ -78,7 +78,7 @@ The tutorial has multiple components:
 #### L2
 
 - An [evaluator contract](contracts/Evaluator.cairo), that is able to mint and distribute `L1L2-101` points
-- An [ERC20 token](contracts/token/ERC20/TUTOERC20.cairo), ticker `L1L2-101`, that is used to keep track of points
+- An [ERC20 token](contracts/token/ERC20/TDERC20.cairo), ticker `L1L2-101`, that is used to keep track of points
 - An [ERC721 token](contracts/l2nft.cairo), "L2 nft", ticker `L2NFT`
 
 #### L1
