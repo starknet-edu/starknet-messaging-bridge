@@ -1,9 +1,5 @@
 # StarkNet messaging bridge
 
-PLAYERS BEWARE
-
-THIS TUTORIAL IS STILL UNDER DEVELOPMENT. YOU CAN START WORKING ON IT, BUT YOUR BALANCES MAY BE RESET IN THE COMING DAYS.
-
 ## Introduction
 
 Welcome! This is an automated workshop that will explain how to use the StarkNet L1 <-> L2 messaging bridge.
