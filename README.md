@@ -85,7 +85,7 @@ The tutorial has multiple components:
 
 ### Counting your points
 
-Your points will get credited in Argent X; though this may take some time. If you want to monitor your points count in real time, you can also see your balance in voyager!
+Your points will get credited in your wallet; though this may take some time. If you want to monitor your points count in real time, you can also see your balance in voyager!
 ​
 
 - Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9#readContract)  in voyager, in the "read contract" tab
