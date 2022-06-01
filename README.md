@@ -91,6 +91,9 @@ Your points will get credited in Argent X; though this may take some time. If yo
 - Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9#readContract)  in voyager, in the "read contract" tab
 - Enter your address in decimal in the "balanceOf" function
 
+You can also check your overall progress [here](https://starknet-tutorials.vercel.app)
+
+
 #### Transaction status
 
 You sent a transaction, and it is shown as "undetected" in voyager? This can mean two things:
