@@ -148,44 +148,56 @@ nile compile
 | [L1 Dummy token](contracts/L1/DummyToken.sol)               | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                    |
 | [L1 Messaging NFT](contracts/L1/MessagingNft.sol)           | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                    |
 
-StarkNet Core contract: 0xde29d060D45901Fb19ED6C6e959EB22d8626708e
-[Goerli faucet](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#writeContract) (0.1 ether every 2 hours)
+StarkNet Core Contract Proxy: [0xde29d060D45901Fb19ED6C6e959EB22d8626708e](https://goerli.etherscan.io/address/0xde29d060d45901fb19ed6c6e959eb22d8626708e)
 
-## Points list
+Goerli Faucet (0.1 ETH / 2 hours): [0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#writeContract)
 
-### Sending a message to L1, and back
+## Tasks
 
-- Use a function (ex_0_a) of the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6) to mint ERC20 tokens on L1
-- Mint tokens on L1 [DummyToken](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395) by consuming the message with the secret value
-- Show that you have the tokens (`i_have_tokens`) to trigger points distribution on L2 (2 pts)
+### [Ex0] Send an L2→L1→L2 message with existing contracts (2 pts)
 
-### Sending a message to L1 from L2 (Implementation)
+1. Initiate a mint of an arbitrary amount of dummy ERC20 tokens from L2 by calling `ex_0_a` of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
+2. Identify the secret value generated during the process
+3. Execute the mint on L1 by consuming the L2 message using `mint` of [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395) with the secret value identified
+4. Complete the exercise by calling `i_have_tokens` of *L1 DummyToken*, which checks your token balance and triggers points distribution by *L2 Evaluator* if all objectives are fulfilled
 
-- There is a contract on [L1 MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) that can mint an ERC721 token.
-- It can receive any message from any smart contract on L2, if the payload is formated correctly
-- Player has to write a L2 contract that sends messages to (MessagingNft), which will mint an ERC721 token
-- Player has to submit the L2 contract that sends message for the minting to the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
-- Player has to call the ex1a() from the evaluator
-- Player has to consume the Message on L1 [MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), the points are distributed automatically to the player on L2 after the mint (2 pts)
+### [Ex1] Send an L2→L1 message with your contract (2 pts)
 
-### Sending a message to L2 from L1
+1. Study the code of [*L1 MessagingNft*](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E), which can mint an ERC721 token by consuming a properly formatted message from L2
+2. Study `ex1a` of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6), which will be used to call your L2 contract that sends a message to L1
+3. Write an L2 contract that sends a messages eligible for triggering an ERC721 token mint to *L1 MessagingNft*
+4. Deploy the contract
+5. Submit the contract address to *L2 Evaluator* by calling its `submit_exercise`
+6. Call `ex1a` of *L2 Evaluator* to trigger the message sending
+7. Complete the exercise by calling `createNftFromL2` of *L1 MessagingNft*, which mints the token and triggers points distribution by *L2 Evaluator* if all objectives are fulfilled
 
-- There is a contract on L2 [l2nft](https://goerli.voyager.online/contract/0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314) that can mint an L2 ERC721 token.
-- Player has to write a L1 contract that sends messages to the [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6), which will mint an ERC721 token (2 pts)
+### [Ex2] Send an L1→L2 message with your contract (2 pts)
 
-### Receiving a message on L1 from L2
+1. Study the code of [*L2 l2nft*](https://goerli.voyager.online/contract/0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314), which mints an ERC721 token on L2 upon triggered
+2. Get the latest address of the StarkNet Core Contract Proxy on Goerli by running `starknet get_contract_addresses --network alpha-goerli` in your CLI
+3. Learn how to get the [selector](https://starknet.io/docs/hello_starknet/l1l2.html#receiving-a-message-from-l1) of a StarkNet contract function
+4. Write an L1 contract that messages and triggers `ex2` of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
+5. Complete the exercise by calling your contract; `ex2` would distribute points if all objectives are fulfilled
 
-- Player has to write a L1 contract that consumes messages from L2
-- Player has to call ex3_a() from [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
-- Player has to call ex3() from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to consume the message and trigger points distribution (2 pts)
+### [Ex3] Receive an L2→L1 message with your contract (2 pts)
 
-### Receiving a message on L2 from L1
+1. Study `ex3_a` of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6), which will be used to send a message to your L1 contract
+2. Study the code of [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179), which will be used to trigger L2 message consumption at your L1 contract 
+3. Write an L1 contract that consumes messages from *L2 Evaluator* on L1 when called by *L1 Evaluator*
+4. Call `ex3_a` of *L2 Evaluator* to send an L2→L1 message
+5. Complete the exercise by calling `ex3` of *L1 Evaluator*, which initiates message consumption at your L1 contract and triggers points distribution by *L2 Evaluator* if all objectives are fulfilled
 
-- Player has to create a L2 contract that can receive message from [L1 Evaluator](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179) in order to set the random value assigned on the message
-- Player has to call ex4_b() from [L2 Evaluator](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6) in order to get the points (2 pts)
+### [Ex4] Receive an L1→L2 message with your contract (2 pts)
 
-Useful resources
-<https://starknet.io/documentation/l1-l2-messaging/#l1-l2-messaging>  
-<https://starknet.io/docs/hello_starknet/l1l2.html>  
-<https://github.com/l-henri/StarkNet-graffiti>  
-<https://twitter.com/HenriLieutaud/status/1466324729829154822>  
+1. Study the code of [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179), which will be used to send a random value to both your L2 contract and *L2 Evaluator*
+2. Study `ex4_b` of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6), which will be used to check your L2 contract's random value
+3. Write an L2 contract that receives the message from *L1 Evaluator*, records the random value attached and provides access to the value
+4. Call `ex4` of *L1 Evaluator* to send the random value out
+5. Complete the exercise by calling `ex4_b` of *L2 Evaluator*, which checks the value in your contract and distributes points if all objectives are fulfilled
+
+## Useful Resources
+
+- [Messaging Mechanism | StarkNet Docs](https://docs.starknet.io/docs/L1%3C%3EL2%20Communication/messaging-mechanism)
+- [Interacting with L1 contracts | StarkNet Documentation](https://starknet.io/docs/hello_starknet/l1l2.html)
+- Sample Project: [StarkNet graffiti | GitHub](https://github.com/l-henri/StarkNet-graffiti)
+- [Thread on StarkNet ⇄ Ethereum Messaging | Twitter](https://twitter.com/HenriLieutaud/status/1466324729829154822)
