@@ -125,7 +125,9 @@ docker run --rm -it -v ${pwd}:/work --workdir /work shardlabs/cairo-cli:latest
 ### Step 3 -Test that you are able to compile the project
 
 ```bash
-
+```
+​
+​
 ## Working on the tutorial
 ### Workflow
 
