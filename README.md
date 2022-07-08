@@ -71,6 +71,60 @@ This project can be made better and will evolve as StarkNet matures. Your contri
 - Add an explanation in the comments of the exercise if you feel it needs more explanation
 
 ​
+​
+
+## Getting ready to work
+### Step 1 - Clone the repo
+```bash
+git clone https://github.com/starknet-edu/starknet-messaging-bridge
+cd starknet-messaging-bridge
+```
+
+
+
+### Step 2 - Set up your environment
+
+There are two ways to set up your environment on StarkNet: a local installation, or using a docker container
+
+- For Mac and Linux users, we recommend either
+- For windows users we recommand docker
+
+For a production setup instructions we wrote [this article](https://medium.com/starknet-edu/the-ultimate-starknet-dev-environment-716724aef4a7).
+
+
+#### Option A - Set up a local python environment 
+
+- Set up the environment following [these instructions](https://starknet.io/docs/quickstart.html#quickstart)
+- Install [OpenZeppelin's cairo contracts](https://github.com/OpenZeppelin/cairo-contracts).
+
+```bash
+pip install openzeppelin-cairo-contracts
+```
+
+#### Option B - Use a dockerized environment
+
+- Linux and macos
+
+for mac m1:
+
+```bash
+alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:latest-arm'
+```
+
+for amd processors
+
+```bash
+alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:latest'
+```
+
+- Windows
+
+```bash
+docker run --rm -it -v ${pwd}:/work --workdir /work shardlabs/cairo-cli:latest
+```
+### Step 3 -Test that you are able to compile the project
+
+```bash
 
 ## Working on the tutorial
 ### Workflow
