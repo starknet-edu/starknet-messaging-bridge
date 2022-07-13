@@ -146,9 +146,9 @@ To do this tutorial you will have to interact with the [`Evaluator.cairo`](contr
 
 | Contract code                                               | Contract on voyager                                                                                                                                                             |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [L2 Evaluator](contracts/Evaluator.cairo)| [0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)|
-| [Points counter ERC20](contracts/token/ERC20/TDERC20.cairo) | [0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9) |
-| [L2 Dummy NFT](contracts/l2nft.cairo)| [0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314](https://goerli.voyager.online/contract/0x008b7c46e561bf4b7c0ad39716386207041310900742c980253024e3b6be1314) |
+| [L2 Evaluator](contracts/Evaluator.cairo)| [0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99)|
+| [Points counter ERC20](contracts/token/ERC20/TDERC20.cairo) | [0x38ec18163a6923a96870f3d2b948a140df89d30120afdf90270b02c609f8a88](https://goerli.voyager.online/contract/0x38ec18163a6923a96870f3d2b948a140df89d30120afdf90270b02c609f8a88) |
+| [L2 Dummy NFT](contracts/l2nft.cairo)| [0x6cc3df14b8b3e8c05ad19c74f373e110bba0380b2799bcd9f717d31d2757625](https://goerli.voyager.online/contract/0x6cc3df14b8b3e8c05ad19c74f373e110bba0380b2799bcd9f717d31d2757625) |
 | [L1 Evaluator](contracts/L1/Evaluator.sol)| [0x8055d587A447AE186d1589F7AAaF90CaCCc30179](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)|
 | [L1 Dummy token](contracts/L1/DummyToken.sol)| [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)|
 | [L1 Messaging NFT](contracts/L1/MessagingNft.sol)| [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)|
@@ -161,7 +161,7 @@ To do this tutorial you will have to interact with the [`Evaluator.cairo`](contr
 ### Exercise 0 - Send an L2→L1→L2 message with existing contracts (2 pts)
 Use a predeployed contract to mint ERC20 tokens on L1 from L2. A secret message is passed with the messages; be sure to find it in order to collect your points.
 
-- Call function [`ex_0_a`](contracts/Evaluator.cairo#L121) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6)
+- Call function [`ex_0_a`](contracts/Evaluator.cairo#L121) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99)
   - You need to specify an L1 address, and an amount of ERC20 to mint
   - The secret message is sent from L2 to L1 at this stage.
 - Call [`mint`](contracts/L1/DummyToken.sol#L37) of [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)
@@ -196,7 +196,7 @@ Write and deploy a contract on L1 that *sends* messages to L2.
   - Your message consumption function should be called [`consumeMessage`](contracts/L1/Evaluator.sol#L51)
 - Deploy your L1 contract
 - Register your exercice on [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)
-- Call [`ex3_a`](contracts/Evaluator.cairo#L231) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x02a77bb771fdcb0966639bab6e2b5842e7d0e7dff2f8258e3aee8e38695d98f6) to send an L2→L1 message
+- Call [`ex3_a`](contracts/Evaluator.cairo#L231) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99) to send an L2→L1 message
 - Call [`ex3`](contracts/L1/Evaluator.sol#L32)of *L1 Evaluator*, which triggers message consumption from your L1 contract 
   - L1 evaluator will also [send back](contracts/L1/Evaluator.sol#L57) a message to L2 to distribute your points
 
@@ -229,7 +229,7 @@ To open Python in interactive mode after running script
 Your points will get credited in your wallet; though this may take some time. If you want to monitor your points count in real time, you can also see your balance in voyager!
 ​
 
-- Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x01c1a868018f540bc456d2ba4859d20b06a8542fa447cd499f7372d9fd1c1bf9#readContract)  in voyager, in the "read contract" tab
+- Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x38ec18163a6923a96870f3d2b948a140df89d30120afdf90270b02c609f8a88#readContract)  in voyager, in the "read contract" tab
 - Enter your address in decimal in the "balanceOf" function
 
 You can also check your overall progress [here](https://starknet-tutorials.vercel.app)
