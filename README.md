@@ -58,7 +58,7 @@ Once you are done working on this tutorial, your feedback would be greatly appre
 And if you struggle to move forward, do let us know! This workshop is meant to be as accessible as possible; we want to know if it's not the case.
 
 ​
-Do you have a question? Join our [Discord server](https://discord.gg/79fS9UcxHZ), register, and join channel #tutorials-support
+Do you have a question? Join our [Discord server](https://discord.gg/starknet), register, and join channel #tutorials-support
 ​
 
 ### Contributing
