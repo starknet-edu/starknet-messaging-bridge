@@ -25,13 +25,13 @@ The goal of this tutorial is for you to create and deploy contracts on StarkNet 
 
 Your progress will be check by an [evaluator contract](contracts/Evaluator.cairo), deployed on StarkNet, which will grant you points in the form of [ERC20 tokens](contracts/token/ERC20/TDERC20.cairo).
 
-Each exercice will require you to add functionnality to your bridge.
+Each exercise will require you to add functionnality to your bridge.
 
 - The first part allows you to send messages back and forth from L1 to L2, without necessarily having to code.
 - The second part requires you to code smart contracts on L1 and L2 that are able to send messages to L2 and L1 counterparts.
 - The second part requires you to code smart contracts on L1 and L2 that are able to receive messages from L2 and L1 counterparts.
 
-For each exercice, you will have to write a new version on your contract, deploy it, and submit it to the evaluator for correction.
+For each exercise, you will have to write a new version on your contract, deploy it, and submit it to the evaluator for correction.
 ​
 ​
 
@@ -202,7 +202,7 @@ Write and deploy a contract on L1 that *sends* messages to L2.
   - Make sure your contract is able to handle the message.
   - Your message consumption function should be called [`consumeMessage`](contracts/L1/Evaluator.sol#L51)
 - Deploy your L1 contract
-- Register your exercice on [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)
+- Register your exercise on [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)
 - Call [`ex3_a`](contracts/Evaluator.cairo#L231) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99) to send an L2→L1 message
 - Call [`ex3`](contracts/L1/Evaluator.sol#L32)of *L1 Evaluator*, which triggers message consumption from your L1 contract
   - L1 evaluator will also [send back](contracts/L1/Evaluator.sol#L57) a message to L2 to distribute your points
