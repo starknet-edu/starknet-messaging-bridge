@@ -140,3 +140,4 @@ Makefile
 
 # nile
 node.json
+package-lock.json
