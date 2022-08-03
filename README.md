@@ -69,7 +69,12 @@ This project can be made better and will evolve as StarkNet matures. Your contri
 - Correct bugs if you find some
 - Add an explanation in the comments of the exercise if you feel it needs more explanation
 
-​
+​​Before contributing run this
+
+```bash
+ln -s ../../pre-commit.sh .git/hooks/pre-commit
+```
+
 ​
 
 ## Getting ready to work

@@ -4,14 +4,12 @@ from starkware.cairo.common.cairo_builtins import HashBuiltin, SignatureBuiltin
 from starkware.cairo.common.math import assert_not_equal
 
 @storage_var
-func ERC165_supported_interfaces(interface_id: felt) -> (is_supported: felt):
+func ERC165_supported_interfaces(interface_id : felt) -> (is_supported : felt):
 end
 
-func ERC165_supports_interface{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        range_check_ptr
-    } (interface_id: felt) -> (success: felt):
+func ERC165_supports_interface{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    interface_id : felt
+) -> (success : felt):
     # 165
     if interface_id == 0x01ffc9a7:
         return (1)
@@ -26,11 +24,9 @@ func ERC165_supports_interface{
     return (0)
 end
 
-func ERC165_register_interface{
-        syscall_ptr: felt*,
-        pedersen_ptr: HashBuiltin*,
-        range_check_ptr
-    } (interface_id: felt):
+func ERC165_register_interface{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
+    interface_id : felt
+):
     # Ensures interface_id is not the invalid interface_id
     assert_not_equal(interface_id, 0xffffffff)
     ERC165_supported_interfaces.write(interface_id, 1)
