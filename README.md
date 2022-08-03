@@ -202,7 +202,6 @@ Write and deploy a contract on L1 that *sends* messages to L2.
   - Make sure your contract is able to handle the message.
   - Your message consumption function should be called [`consumeMessage`](contracts/L1/Evaluator.sol#L51)
 - Deploy your L1 contract
-- Register your exercise on [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)
 - Call [`ex3_a`](contracts/Evaluator.cairo#L231) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99) to send an L2→L1 message
 - Call [`ex3`](contracts/L1/Evaluator.sol#L32)of *L1 Evaluator*, which triggers message consumption from your L1 contract
   - L1 evaluator will also [send back](contracts/L1/Evaluator.sol#L57) a message to L2 to distribute your points
