@@ -211,6 +211,7 @@ Write and deploy a contract on L1 that *sends* messages to L2.
   - You can name your function however you like, since you provide the function selector as a parameter on L1
 - Deploy your contract on L2
 - Call [`ex4`](contracts/L1/Evaluator.sol#L60) of *L1 Evaluator* to send the random value out to your L2 contract
+- Submit your L2 contract address by calling [`submit_exercise`](contracts/Evaluator.cairo#L166) of *L2 Evaluator*
 - Call [`ex4_b`](contracts/Evaluator.cairo#L266) of *L2 Evaluator* that will check you completed your work correctly and distribute your points
 
 ## Annex - Useful tools and ressources
