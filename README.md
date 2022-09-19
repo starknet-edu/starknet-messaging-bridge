@@ -256,7 +256,7 @@ You can (and should) check the status of your transaction with the following URL
 
 ### Articles & documentation
 
-- [Messaging Mechanism | StarkNet Docs](https://docs.starknet.io/docs/L1%3C%3EL2%20Communication/messaging-mechanism)
+- [Messaging Mechanism | StarkNet Docs](https://docs.starknet.io/docs/L1-L2%20Communication/messaging-mechanism/) \[[中文](https://mirror.xyz/0x5eF63Cba4e3B071e1a5Af7f405909e191F7Ec7c2/mwSEbsQMS4bspAVYJdDFahChH-gNEbt8Hez5LmmjOnE)\]
 - [Interacting with L1 contracts | StarkNet Documentation](https://starknet.io/docs/hello_starknet/l1l2.html)
 - Sample Project: [StarkNet graffiti | GitHub](https://github.com/l-henri/StarkNet-graffiti)
 - [Thread on StarkNet ⇄ Ethereum Messaging | Twitter](https://twitter.com/HenriLieutaud/status/1466324729829154822)
