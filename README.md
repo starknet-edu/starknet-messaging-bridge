@@ -263,5 +263,6 @@ You can (and should) check the status of your transaction with the following URL
 - [Interacting with L1 contracts | StarkNet Documentation](https://starknet.io/docs/hello_starknet/l1l2.html)
 - Sample Project: [StarkNet graffiti | GitHub](https://github.com/l-henri/StarkNet-graffiti)
 - [Thread on StarkNet ⇄ Ethereum Messaging | Twitter](https://twitter.com/HenriLieutaud/status/1466324729829154822)
-- It is also usefull to bear in mind the following schema:
+- It is also usefull to bear in mind the following simplified schema:
+![alt text](https://github.com/panda4us/starknet-messaging-bridge/blob/main/images/simplified_messaging_schema.png?raw=true)
 
