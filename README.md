@@ -80,13 +80,6 @@ clon de git https://github.com/starknet-edu/starknet-messaging-bridge
 cd starknet-messaging-bridge
 ```
 
-* Nadai con Soluciones
-
-```bash
-gh repo clone Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1
-cd Nadai-Starknet-Edu-Bridge-L2-L1
-```
-
 ### Paso 2: configure su entorno
 
 Hay dos formas de configurar su entorno en StarkNet: una instalación local o usando un contenedor docker
@@ -186,10 +179,6 @@ Use un contrato implementado previamente para acuñar tokens ERC20 en L1 desde L
 
 ---
 
-* Nadai con Soluciones [Ejercicio 0](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex0.md)
-
----
-
 ### Ejercicio 1 - Envía un mensaje L2→L1 con tu contrato (2 pts)
 
 Escriba e implemente un contrato en L2 que *envíe* mensajes a L1.
@@ -201,10 +190,6 @@ Escriba e implemente un contrato en L2 que *envíe* mensajes a L1.
 - Llame a [`ex1a`](contracts/Evaluator.cairo#L188) de L2 Evaluator para activar el envío del mensaje a L2
 - Llame a [`createNftFromL2`](contracts/L1/MessagingNft.sol#L35) de L1 MessagingNft para activar el consumo de mensajes en L1
   - L1 MessagingNft [devuelve](contracts/L1/MessagingNft.sol#L47) un mensaje a L2 para [acreditar sus puntos](contracts/Evaluator.cairo#L205) en L2
-
----
-
-* Nadai con Soluciones [Ejercicio 1](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex01.md)
 
 ---
 
@@ -221,10 +206,6 @@ Escriba e implemente un contrato en L1 que *envíe* mensajes a L2.
 
 ---
 
-* Nadai con Soluciones [Ejercicio 2](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex02.md)
-
----
-
 ### Ejercicio 3 - Recibe un mensaje L2→L1 con tu contrato (2 pts)
 
 - Escriba un contrato en L1 que recibirá un mensaje de la función [`ex3_a`](contracts/Evaluator.cairo#L231).
@@ -237,11 +218,6 @@ Escriba e implemente un contrato en L1 que *envíe* mensajes a L2.
 
 ---
 
-* Nadai con Soluciones [Ejercicio 3](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex03.md)
-
----
-
-
 ### Ejercicio 4 - Recibe un mensaje L1→L2 con tu contrato (2 pts)
 
 - Escribir un contrato L2 que pueda recibir un mensaje de [`ex4`](contracts/L1/Evaluator.sol#L60) de [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179 )
@@ -250,10 +226,6 @@ Escriba e implemente un contrato en L1 que *envíe* mensajes a L2.
 - Llame a [`ex4`](contracts/L1/Evaluator.sol#L60) de *L1 Evaluator* para enviar el valor aleatorio a su contrato L2
 - Envíe la dirección de su contrato L2 llamando a [`submit_exercise`](contracts/Evaluator.cairo#L166) de *L2 Evaluator*
 - Llame a [`ex4_b`](contracts/Evaluator.cairo#L266) de *L2 Evaluator* que verificará que completó su trabajo correctamente y distribuirá sus puntos
-
----
-
-* Nadai con Soluciones [Ejercicio 4](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex04.md)
 
 ---
 
