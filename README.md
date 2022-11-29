@@ -1,114 +1,127 @@
-# StarkNet messaging bridge
+# Puente de mensajería StarkNet
 
-Welcome! This is an automated workshop that will explain how to use the StarkNet L1 <-> L2 messaging bridge to create powerful cross layer applications.
+¡Bienvenidos! Este es un taller automatizado que explicará cómo usar el puente de mensajería StarkNet L1 <-> L2 para crear poderosas aplicaciones de capas cruzadas.
 
-It is aimed at developers that:
+Está dirigido a desarrolladores que:
 
-- Understand Cairo syntax
-- Understand the Solidity syntax
-- Understand the ERC20 token standard
-- Understand the ERC721 standard
+- Comprenden la sintaxis de El Cairo
+- Comprenden la sintaxis de Solidity
+- Comprenden el estándar de token ERC20
+- Comprenden el esándar ERC721
 
-## Introduction
+## Introducción
 
-### Disclaimer
+### Descargo de responsabilidad
 
+​No espere ningún tipo de beneficio al usar esto, aparte de aprender un montón de cosas interesantes sobre StarkNet, el primer paquete acumulativo de validez de propósito general en Ethereum Mainnnet.
 ​
-Don't expect any kind of benefit from using this, other than learning a bunch of cool stuff about StarkNet, the first general purpose validity rollup on the Ethereum Mainnnet.
-​
-StarkNet is still in Alpha. This means that development is ongoing, and the paint is not dry everywhere. Things will get better, and in the meanwhile, we make things work with a bit of duct tape here and there!
-​
-
-### How it works
-
-The goal of this tutorial is for you to create and deploy contracts on StarkNet and Ethereum that will interact with each other. In other words, you will create your own L1 <-> L2 bridge.
-
-Your progress will be check by an [evaluator contract](contracts/Evaluator.cairo), deployed on StarkNet, which will grant you points in the form of [ERC20 tokens](contracts/token/ERC20/TDERC20.cairo).
-
-Each exercise will require you to add functionnality to your bridge.
-
-- The first part allows you to send messages back and forth from L1 to L2, without necessarily having to code.
-- The second part requires you to code smart contracts on L1 and L2 that are able to send messages to L2 and L1 counterparts.
-- The second part requires you to code smart contracts on L1 and L2 that are able to receive messages from L2 and L1 counterparts.
-
-For each exercise, you will have to write a new version on your contract, deploy it, and submit it to the evaluator for correction.
-​
+StarkNet todavía está en Alfa. Esto significa que el desarrollo está en curso y que la pintura no está seca en todas partes. Las cosas mejorarán, y mientras tanto, ¡hacemos que las cosas funcionen con un poco de cinta adhesiva aquí y allá!
 ​
 
-### Where am I?
+### Cómo funciona
 
-This workshop is the fourth in a series aimed at teaching how to build on StarkNet. Checkout out the following:
+El objetivo de este tutorial es que cree e implemente contratos en StarkNet y Ethereum que interactuarán entre sí. En otras palabras, creará su propio puente L1 <-> L2.
 
-| Topic                                          | GitHub repo                                                                            |
+Su progreso será verificado por un [contrato de evaluador](contratos/Evaluador.cairo), implementado en StarkNet, que le otorgará puntos en forma de [tokens ERC20](contratos/token/ERC20/TDERC20.cairo).
+
+Cada ejercicio requerirá que agregue funcionalidad a su puente.
+
+- La primera parte le permite enviar y recibir mensajes de L1 a L2, sin tener que codificar necesariamente.
+- La segunda parte requiere que codifiques contratos inteligentes en L1 y L2 que puedan enviar mensajes a las contrapartes de L2 y L1.
+- La segunda parte requiere que codifique contratos inteligentes en L1 y L2 que puedan recibir mensajes de contrapartes L2 y L1.
+
+Para cada ejercicio, deberá escribir una nueva versión en su contrato, implementarlo y enviarlo al evaluador para su corrección.
+​
+​
+### ¿Dónde estoy?
+
+Este taller es el cuarto de una serie destinada a enseñar cómo construir en StarkNet. Echa un vistazo a lo siguiente:
+
+| Tema                                           | GitHub repo                                                                            |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Learn how to read Cairo code                   | [Cairo 101](https://github.com/starknet-edu/starknet-cairo-101)                        |
-| Deploy and customize an ERC721 NFT             | [StarkNet ERC721](https://github.com/starknet-edu/starknet-erc721)                     |
-| Deploy and customize an ERC20 token            | [StarkNet ERC20](https://github.com/starknet-edu/starknet-erc20)                       |
-| Build a cross layer application (you are here) | [StarkNet messaging bridge](https://github.com/starknet-edu/starknet-messaging-bridge) |
-| Debug your Cairo contracts easily              | [StarkNet debug](https://github.com/starknet-edu/starknet-debug)                       |
-| Design your own account contract               | [StarkNet account abstraction](https://github.com/starknet-edu/starknet-accounts)      |
+| Aprenda a leer el código de El Cairo           | [Cairo 101](https://github.com/starknet-edu/starknet-cairo-101)                        |
+| Implemente y personalice un ERC721 NFT         | [StarkNet ERC721](https://github.com/starknet-edu/starknet-erc721)                     |
+| Implemente y personalice un token ERC20        | [StarkNet ERC20](https://github.com/starknet-edu/starknet-erc20)                       |
+| Cree una app de capa cruzada (usted está aquí) | [StarkNet messaging bridge](https://github.com/starknet-edu/starknet-messaging-bridge) |
+| Depure sus contratos de El Cairo fácilmente    | [StarkNet debug](https://github.com/starknet-edu/starknet-debug)                       |
+| Diseña tu propio contrato de cuenta            | [StarkNet account abstraction](https://github.com/starknet-edu/starknet-accounts)      |
 
-### Providing feedback & getting help
 
-Once you are done working on this tutorial, your feedback would be greatly appreciated!
+### Proporcionar comentarios y obtener ayuda
 
-**Please fill out [this form](https://forms.reform.app/starkware/untitled-form-4/kaes2e) to let us know what we can do to make it better.**
+Una vez que haya terminado de trabajar en este tutorial, ¡sus comentarios serán muy apreciados!
 
-​
-And if you struggle to move forward, do let us know! This workshop is meant to be as accessible as possible; we want to know if it's not the case.
+**Complete [este formulario](https://forms.reform.app/starkware/untitled-form-4/kaes2e) para informarnos qué podemos hacer para mejorarlo.**
 
 ​
-Do you have a question? Join our [Discord server](https://starknet.io/discord), register, and join channel #tutorials-support
-​
-
-### Contributing
-
-This project can be made better and will evolve as StarkNet matures. Your contributions are welcome! Here are things that you can do to help:
-
-- Create a branch with a translation to your language
-- Correct bugs if you find some
-- Add an explanation in the comments of the exercise if you feel it needs more explanation
+Y si tiene dificultades para seguir adelante, ¡háganoslo saber! Este taller está destinado a ser lo más accesible posible; queremos saber si no es el caso.
 
 ​
+¿Tienes una pregunta? Únase a nuestro [servidor Discord](https://starknet.io/discord), regístrese y únase al canal #tutorials-support
+​
 
-## Getting ready to work
+### Contribuyendo
 
-### Step 1 - Clone the repo
+Este proyecto se puede mejorar y evolucionará a medida que StarkNet madure. ¡Sus contribuciones son bienvenidas! Aquí hay cosas que puede hacer para ayudar:
+
+- Crea una sucursal con una traducción a tu idioma
+- Corrija los errores si encuentra alguno.
+- Agregue una explicación en los comentarios del ejercicio si cree que necesita más explicación
+
+​
+## Preparándose para trabajar
+
+### Paso 1: clonar el repositorio
+
+*  Oficial
 
 ```bash
-git clone https://github.com/starknet-edu/starknet-messaging-bridge
+clon de git https://github.com/starknet-edu/starknet-messaging-bridge
 cd starknet-messaging-bridge
 ```
 
-### Step 2 - Set up your environment
-
-There are two ways to set up your environment on StarkNet: a local installation, or using a docker container
-
-- For Mac and Linux users, we recommend either
-- For windows users we recommand docker
-
-For a production setup instructions we wrote [this article](https://medium.com/starknet-edu/the-ultimate-starknet-dev-environment-716724aef4a7).
-
-#### Option A - Set up a local python environment
-
-- Set up the environment following [these instructions](https://starknet.io/docs/quickstart.html#quickstart)
-- Install [OpenZeppelin's cairo contracts](https://github.com/OpenZeppelin/cairo-contracts).
+* Nadai con Soluciones
 
 ```bash
-pip install openzeppelin-cairo-contracts
+gh repo clone Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1
+cd Nadai-Starknet-Edu-Bridge-L2-L1
 ```
 
-#### Option B - Use a dockerized environment
+### Paso 2: configure su entorno
 
-- Linux and macos
+Hay dos formas de configurar su entorno en StarkNet: una instalación local o usando un contenedor docker
 
-for mac m1:
+- Para usuarios de Mac y Linux, recomendamos
+- Para usuarios de Windows recomendamos docker
+
+Para obtener instrucciones de configuración de producción, escribimos [este artículo](https://medium.com/starknet-edu/the-ultimate-starknet-dev-environment-716724aef4a7).
+
+#### Opción A: configurar un entorno Python local
+
+- Configure el entorno siguiendo [estas instrucciones](https://starknet.io/docs/quickstart.html#quickstart)
+- Instale [los contratos cairo de OpenZeppelin](https://github.com/OpenZeppelin/cairo-contracts).
+
+```bash
+pip install openzeppelin-cairo-contratos
+```
+
+Si la error pruebe
+
+```bash
+gh repo clone OpenZeppelin/cairo-contracts
+```
+
+#### Opción B: usar un entorno dockerizado
+
+-Linux y macos
+
+Pra mac m1:
 
 ```bash
 alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:latest-arm'
 ```
 
-for amd processors
+Para procesadores amd
 
 ```bash
 alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:latest'
@@ -120,31 +133,29 @@ alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:late
 docker run --rm -it -v ${pwd}:/work --workdir /work shardlabs/cairo-cli:latest
 ```
 
-### Step 3 -Test that you are able to compile the project
+### Paso 3: pruebe que puede compilar el proyecto
 
 ```bash
 starknet-compile contracts/Evaluator.cairo
 ```
-
-​
 ​
 
-## Working on the tutorial
+## Trabajando en el tutorial
 
-### Workflow
+### Flujo de trabajo
 
-L2 -> L1 communication takes ~30 mins so it is recommended to send the messages from L2 to L1 as soon as possible and to do the exercises on L1 in the meantime.
+La comunicación L2 -> L1 tarda ~30 minutos, por lo que se recomienda enviar los mensajes de L2 a L1 lo antes posible y hacer los ejercicios en L1 mientras tanto.
 
-To do this tutorial you will have to interact with the [`Evaluator.cairo`](contracts/Evaluator.cairo) contract. To validate an exercise you will have to
+Para hacer este tutorial tendrás que interactuar con el contrato [`Evaluator.cairo`](contracts/Evaluator.cairo). Para validar un ejercicio tendrás que
 
-- Read the evaluator code to figure out what is expected of your contract
-- Customize your contract's code
-- Deploy it to StarkNet's testnet. This is done using the CLI.
-- Register your exercise for correction, using the `submit_exercise` function on the evaluator. This is done using Voyager.
-- Call the relevant function on the evaluator contract to get your exercise corrected and receive your points. This is done using Voyager.
-- There is also an [evaluator contract](contracts/L1/Evaluator.sol) on L1, that will check your solidity work. The workflow to use it is the same as above, only on L1.
+- Lea el código del evaluador para averiguar qué se espera de su contrato
+- Personaliza el código de tu contrato
+- Implementarlo en la red de prueba de StarkNet. Esto se hace usando la CLI.
+- Registre su ejercicio para corrección, usando la función `submit_exercise` en el evaluador. Esto se hace usando Voyager.
+- Llame a la función correspondiente en el contrato del evaluador para corregir su ejercicio y recibir sus puntos. Esto se hace usando Voyager.
+- También hay un [contrato de evaluador](contracts/L1/Evaluator.sol) en L1, que comprobará la solidez de tu trabajo. El flujo de trabajo para usarlo es el mismo que el anterior, solo en L1.
 
-### Exercises & Contract addresses
+### Ejercicios y direcciones de contratos
 
 | Contract code                                                                                                                    | Contract on voyager                                                                                                                                                           |
 | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -155,71 +166,103 @@ To do this tutorial you will have to interact with the [`Evaluator.cairo`](contr
 | [L1 Dummy token](contracts/L1/DummyToken.sol)                                                                                    | [0x0232CB90523F181Ab4990Eb078Cf890F065eC395](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)                                                  |
 | [L1 Messaging NFT](contracts/L1/MessagingNft.sol)                                                                                | [0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E)                                                  |
 | [StarkNet Core Contract Proxy](https://goerli.etherscan.io/address/0xde29d060d45901fb19ed6c6e959eb22d8626708e#readContract)      | [0xde29d060D45901Fb19ED6C6e959EB22d8626708e](https://goerli.etherscan.io/address/0xde29d060d45901fb19ed6c6e959eb22d8626708e)                                                  |
-| [Goerli Faucet (0.1 ETH / 2 hours)](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#readContract) | [0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#writeContract)                                    |
+| [Goerli Faucet (0.1 ETH / 2 hours)](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#readContract) | [0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a](https://goerli.etherscan.io/address/0x25864095d3eB9F7194C1ccbb01871c9b1bd5787a#writeContract)     
 
-## Tasks list
 
-### Exercise 0 - Send an L2→L1→L2 message with existing contracts (2 pts)
+## Lista de tareas
 
-Use a predeployed contract to mint ERC20 tokens on L1 from L2. A secret message is passed with the messages; be sure to find it in order to collect your points.
+### Ejercicio 0 - Enviar un mensaje L2→L1→L2 con contratos existentes (2 pts)
+
+Use un contrato implementado previamente para acuñar tokens ERC20 en L1 desde L2. Se pasa un mensaje secreto con los mensajes; asegúrese de encontrarlo para acumular sus puntos.
 
 - Call function [`ex_0_a`](contracts/Evaluator.cairo#L121) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99)
-  - You need to specify an L1 address, and an amount of ERC20 to mint
-  - The secret message is sent from L2 to L1 at this stage.
-- Call [`mint`](contracts/L1/DummyToken.sol#L37) of [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)
-  - You need to show that you know the secret value at this step
-- Call [`i_have_tokens`](contracts/L1/DummyToken.sol#L48) of [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)
-  - This function checks that you have indeed been able to mint ERC20 tokens, and will then send a message back to L2 to credit your points
-  - This is done using [`ex_0_b`](contracts/Evaluator.cairo#L143) of the L2 evaluator
+- Debe especificar una dirección L1 y una cantidad de ERC20 para acuñar
+- El mensaje secreto se envía de L2 a L1 en esta etapa.
+- Llame a [`mint`](contracts/L1/DummyToken.sol#L37) de [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)
+  - Debe demostrar que conoce el valor secreto en este paso
+- Llame a [`i_have_tokens`](contracts/L1/DummyToken.sol#L48) de [*L1 DummyToken*](https://goerli.etherscan.io/address/0x0232CB90523F181Ab4990Eb078Cf890F065eC395)
+  - Esta función verifica que hayas podido acuñar tokens ERC20 y luego enviará un mensaje a L2 para acreditar tus puntos
+  - Esto se hace usando [`ex_0_b`](contracts/Evaluator.cairo#L143) del evaluador L2
 
-### Exercise 1 - Send an L2→L1 message with your contract (2 pts)
+---
 
-Write and deploy a contract on L2 that *sends* messages to L1.
+* Nadai con Soluciones [Ejercicio 0](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex0.md)
 
-- Write a contract on L2 that will send a message to [L1 MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) and trigger [`createNftFromL2`](contracts/L1/MessagingNft.sol#L35)
-  - Your function should be called [`create_l1_nft_message`](contracts/Evaluator.cairo#L198)
-- Deploy your contract
-- Submit the contract address to L2 Evaluator by calling its [`submit_exercise`](contracts/Evaluator.cairo#L166)
-- Call [`ex1a`](contracts/Evaluator.cairo#L188) of L2 Evaluator to trigger the message sending to L2
-- Call [`createNftFromL2`](contracts/L1/MessagingNft.sol#L35) of L1 MessagingNft to trigger the message consumption on L1
-  - L1 MessagingNft [sends back](contracts/L1/MessagingNft.sol#L47) a message to L2 to [credit your points](contracts/Evaluator.cairo#L205) on L2
+---
 
-### Exercise 2 - Send an L1→L2 message with your contract (2 pts)
+### Ejercicio 1 - Envía un mensaje L2→L1 con tu contrato (2 pts)
 
-Write and deploy a contract on L1 that *sends* messages to L2.
+Escriba e implemente un contrato en L2 que *envíe* mensajes a L1.
 
-- Write a contract on L1 that will send a message to L2 Evaluator and trigger [`ex2`](contracts/Evaluator.cairo#L221)
-  - You can check how L1 MessagingNft [sends](contracts/L1/MessagingNft.sol#L47) a message to L2 to get some ideas
-  - You can get latest address of the StarkNet Core Contract Proxy on Goerli by running `starknet get_contract_addresses --network alpha-goerli` in your CLI
-  - Learn how to get the [selector](https://starknet.io/docs/hello_starknet/l1l2.html#receiving-a-message-from-l1) of a StarkNet contract function
-- Deploy your contract
-- Trigger the message sending on L1. Your  points are automatically attributed on L2.
+- Escriba un contrato en L2 que enviará un mensaje a [L1 MessagingNft](https://goerli.etherscan.io/address/0x6DD77805FD35c91EF6b2624Ba538Ed920b8d0b4E) y activará [`createNftFromL2`](contracts/L1/MessagingNft.sol#L35)
+- Su función debe llamarse [`create_l1_nft_message`](contracts/Evaluator.cairo#L198)
+- Despliega tu contrato
+- Envíe la dirección del contrato a L2 Evaluator llamando a su [`submit_exercise`](contracts/Evaluator.cairo#L166)
+- Llame a [`ex1a`](contracts/Evaluator.cairo#L188) de L2 Evaluator para activar el envío del mensaje a L2
+- Llame a [`createNftFromL2`](contracts/L1/MessagingNft.sol#L35) de L1 MessagingNft para activar el consumo de mensajes en L1
+  - L1 MessagingNft [devuelve](contracts/L1/MessagingNft.sol#L47) un mensaje a L2 para [acreditar sus puntos](contracts/Evaluator.cairo#L205) en L2
 
-### Exercise 3 - Receive an L2→L1 message with your contract (2 pts)
+---
 
-- Write a contract on L1 that will receive a message from  from function [`ex3_a`](contracts/Evaluator.cairo#L231).
-  - Make sure your contract is able to handle the message.
-  - Your message consumption function should be called [`consumeMessage`](contracts/L1/Evaluator.sol#L51)
-- Deploy your L1 contract
-- Call [`ex3_a`](contracts/Evaluator.cairo#L231) of [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99) to send an L2→L1 message
-- Call [`ex3`](contracts/L1/Evaluator.sol#L32)of *L1 Evaluator*, which triggers message consumption from your L1 contract
-  - L1 evaluator will also [send back](contracts/L1/Evaluator.sol#L57) a message to L2 to distribute your points
+* Nadai con Soluciones [Ejercicio 1](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex01.md)
 
-### Exercise 4 - Receive an L1→L2 message with your contract (2 pts)
+---
 
-- Write a L2 contract that is able to receive a message from [`ex4`](contracts/L1/Evaluator.sol#L60) of [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179)
-  - You can name your function however you like, since you provide the function selector as a parameter on L1
-- Deploy your contract on L2
-- Call [`ex4`](contracts/L1/Evaluator.sol#L60) of *L1 Evaluator* to send the random value out to your L2 contract
-- Submit your L2 contract address by calling [`submit_exercise`](contracts/Evaluator.cairo#L166) of *L2 Evaluator*
-- Call [`ex4_b`](contracts/Evaluator.cairo#L266) of *L2 Evaluator* that will check you completed your work correctly and distribute your points
+### Ejercicio 2 - Envía un mensaje L1→L2 con tu contrato (2 pts)
 
-## Annex - Useful tools and ressources
+Escriba e implemente un contrato en L1 que *envíe* mensajes a L2.
 
-### Converting data to and from decimal
+- Escriba un contrato en L1 que enviará un mensaje a L2 Evaluator y activará [`ex2`](contracts/Evaluator.cairo#L221)
+  - Puede comprobar cómo L1 MessagingNft [envía](contratos/L1/MessagingNft.sol#L47) un mensaje a L2 para obtener algunas ideas.
+  - Puede obtener la dirección más reciente del StarkNet Core Contract Proxy en Goerli ejecutando `starknet get_contract_addresses --network alpha-goerli` en su CLI
+  - Aprenda cómo obtener el [selector](https://starknet.io/docs/hello_starknet/l1l2.html#receive-a-message-from-l1) de una función de contrato de StarkNet
+- Despliega tu contrato
+- Activar el envío de mensajes en L1. Sus puntos se atribuyen automáticamente en L2.
 
-To convert data to felt use the [`utils.py`](utils.py) script
-To open Python in interactive mode after running script
+---
+
+* Nadai con Soluciones [Ejercicio 2](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex02.md)
+
+---
+
+### Ejercicio 3 - Recibe un mensaje L2→L1 con tu contrato (2 pts)
+
+- Escriba un contrato en L1 que recibirá un mensaje de la función [`ex3_a`](contracts/Evaluator.cairo#L231).
+  - Asegúrese de que su contrato pueda manejar el mensaje.
+  - Su función de consumo de mensajes debe llamarse [`consumeMessage`](contracts/L1/Evaluator.sol#L51)
+- Implemente su contrato L1
+- Llame a [`ex3_a`](contracts/Evaluator.cairo#L231) de [*L2 Evaluator*](https://goerli.voyager.online/contract/0x595bfeb84a5f95de3471fc66929710e92c12cce2b652cd91a6fef4c5c09cd99) para enviar un mensaje L2→L1
+- Llame a [`ex3`](contracts/L1/Evaluator.sol#L32) de *L1 Evaluator*, que activa el consumo de mensajes de su contrato L1
+  - El evaluador de L1 también [devolverá](contracts/L1/Evaluator.sol#L57) un mensaje a L2 para distribuir sus puntos
+
+---
+
+* Nadai con Soluciones [Ejercicio 3](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex03.md)
+
+---
+
+
+### Ejercicio 4 - Recibe un mensaje L1→L2 con tu contrato (2 pts)
+
+- Escribir un contrato L2 que pueda recibir un mensaje de [`ex4`](contracts/L1/Evaluator.sol#L60) de [*L1 Evaluator*](https://goerli.etherscan.io/address/0x8055d587A447AE186d1589F7AAaF90CaCCc30179 )
+  - Puede nombrar su función como desee, ya que proporciona el selector de función como parámetro en L1
+- Implemente su contrato en L2
+- Llame a [`ex4`](contracts/L1/Evaluator.sol#L60) de *L1 Evaluator* para enviar el valor aleatorio a su contrato L2
+- Envíe la dirección de su contrato L2 llamando a [`submit_exercise`](contracts/Evaluator.cairo#L166) de *L2 Evaluator*
+- Llame a [`ex4_b`](contracts/Evaluator.cairo#L266) de *L2 Evaluator* que verificará que completó su trabajo correctamente y distribuirá sus puntos
+
+---
+
+* Nadai con Soluciones [Ejercicio 4](https://github.com/Nadai2010/Nadai-Starknet-Edu-Bridge-L2-L1/blob/master/contracts/Soluci%C3%B3n/ex04.md)
+
+---
+
+## Anexo - Herramientas y recursos útiles
+
+### Conversión de datos a y desde decimal
+
+Para convertir datos en fieltro, use el script [`utils.py`](utils.py)
+Para abrir Python en modo interactivo después de ejecutar el script
 
   ```bash
   python -i utils.py
@@ -230,33 +273,33 @@ To open Python in interactive mode after running script
   1278752977803006783537
   ```
 
-### Checking your progress & counting your points
 
-​
-Your points will get credited in your wallet; though this may take some time. If you want to monitor your points count in real time, you can also see your balance in voyager!
-​
+### Comprobando tu progreso y contando tus puntos
 
-- Go to the  [ERC20 counter](https://goerli.voyager.online/contract/0x38ec18163a6923a96870f3d2b948a140df89d30120afdf90270b02c609f8a88#readContract)  in voyager, in the "read contract" tab
-- Enter your address in decimal in the "balanceOf" function
-
-You can also check your overall progress [here](https://starknet-tutorials.vercel.app)
+​Sus puntos se acreditarán en su billetera; aunque esto puede tomar algún tiempo. Si desea controlar su conteo de puntos en tiempo real, ¡también puede ver su saldo en Voyager!
 ​
 
-### Transaction status
+- Vaya al [contador ERC20](https://goerli.voyager.online/contract/0x38ec18163a6923a96870f3d2b948a140df89d30120afdf90270b02c609f8a88#readContract) en voyager, en la pestaña "leer contrato"
+- Ingrese su dirección en decimal en la función "balanceOf"
 
-​
-You sent a transaction, and it is shown as "undetected" in voyager? This can mean two things:
-​
-
-- Your transaction is pending, and will be included in a block shortly. It will then be visible in voyager.
-- Your transaction was invalid, and will NOT be included in a block (there is no such thing as a failed transaction in StarkNet).
-​
-You can (and should) check the status of your transaction with the following URL  [https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=](https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=)  , where you can append your transaction hash.
+También puede verificar su progreso general [aquí] (https://starknet-tutorials.vercel.app)
 ​
 
-### Articles & documentation
 
-- [Messaging Mechanism | StarkNet Docs](https://docs.starknet.io/docs/L1%3C%3EL2%20Communication/messaging-mechanism)
-- [Interacting with L1 contracts | StarkNet Documentation](https://starknet.io/docs/hello_starknet/l1l2.html)
-- Sample Project: [StarkNet graffiti | GitHub](https://github.com/l-henri/StarkNet-graffiti)
-- [Thread on StarkNet ⇄ Ethereum Messaging | Twitter](https://twitter.com/HenriLieutaud/status/1466324729829154822)
+### Estado de la transacción
+
+​¿Envió una transacción y se muestra como "no detectada" en voyager? Esto puede significar dos cosas:
+​
+- Su transacción está pendiente y se incluirá en un bloque en breve. Entonces será visible en Voyager.
+- Su transacción no fue válida y NO se incluirá en un bloque (no existe una transacción fallida en StarkNet).
+​
+Puede (y debe) verificar el estado de su transacción con la siguiente URL [https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=](https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=), donde puede agregar el hash de su transacción.
+​
+
+### Artículos y documentación
+
+- [Mecanismo de mensajería | Documentos de StarkNet](https://docs.starknet.io/docs/L1%3C%3EL2%20Communication/messaging-mechanism)
+- [Interactuando con contratos L1 | Documentación de StarkNet](https://starknet.io/docs/hello_starknet/l1l2.html)
+- Proyecto de muestra: [graffiti de StarkNet | GitHub](https://github.com/l-henri/StarkNet-graffiti)
+- [Hilo en StarkNet ⇄ Mensajería Ethereum | Twitter](https://twitter.com/HenriLieutaud/status/1466324729829154822)
+
