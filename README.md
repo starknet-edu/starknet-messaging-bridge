@@ -117,7 +117,7 @@ alias cairo='docker run --rm -v "$PWD":"$PWD" -w "$PWD" shardlabs/cairo-cli:late
 - Windows
 
 ```bash
-docker run --rm -it -v ${pwd}:/work --workdir /work shardlabs/cairo-cli:latest
+docker run --rm -it -v %cd%:/work --workdir /work shardlabs/cairo-cli:latest
 ```
 
 ### Step 3 -Test that you are able to compile the project
