@@ -97,11 +97,10 @@ mod Ex00Base {
             .distribute_points(to, points_to_credit);
     }
 
-    fn validate_exercise(account: ContractAddress) {
+    fn validate_exercise(account: ContractAddress, exercise_id: u128) {
         // reading player registry
         let players_registry = players_registry_storage::read();
         let workshop_id = workshop_id_storage::read();
-        let exercise_id = exercise_id_storage::read();
 
         let has_current_user_validated_exercise =
             Iplayers_registryDispatcher{contract_address: players_registry}
