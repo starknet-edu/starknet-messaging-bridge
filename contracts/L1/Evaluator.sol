@@ -14,12 +14,9 @@ contract Evaluator is Ownable {
     IStarknetCore private starknetCore;
     uint256 public l2Evaluator;
     uint256 public ex01_selector;
-    uint256 public ex02_b_selector;
-    uint256 public ex04_b_selector;
-    uint256 public ex06_b_selector;
+    uint256 public genericValidatorSelector;
+    uint256 public ex05b_selector;
 
-
-    event HashCalculated(bytes32 msgHash_);
     event MessageReceived(uint256 msgInDecimal);
 
     ////////////////////////////////
@@ -36,6 +33,10 @@ contract Evaluator is Ownable {
 
     function ex01SendMessageToL2(uint256 player_l2_address, uint256 message) external {
         // Sending a message to L2
+        // To validate this exercice, you need to successfully call this function on L1
+        // It will then send a message to the evaluator on L2, which will credit you points.
+
+        // Sending the message to the evaluator
         // Creating the payload
         uint256[] memory payload = new uint256[](3);
         // Adding player address on L2
@@ -44,11 +45,18 @@ contract Evaluator is Ownable {
         payload[1] = uint256(uint160(msg.sender));
         // Adding player message 
         payload[2] = message;
+        // Sending the message
         starknetCore.sendMessageToL2(l2Evaluator, ex01_selector, payload);
     }
 
     function ex02ReceiveMessageFromL2(uint256 player_l2_address, uint256 message) external {
         // Receiving a message from L2
+        // To validate this exercice, you need to:
+        // - Use the evaluator on L2 to send a message to this contract on L1
+        // - Call this function on L1 to consume the message 
+        // - This function will then send back a message to L2 to credit points on player_l2_address
+
+        // Consuming the message 
         // Reconstructing the payload of the message we want to consume
         uint256[] memory payload = new uint256[](2);
         // Adding the address of the player on L2
@@ -56,29 +64,34 @@ contract Evaluator is Ownable {
         // Adding the message
         payload[2] = message;
 
-        // Consuming the message
         // If the message constructed above was indeed sent by starknet, this returns the hash of the message
         // If the message was NOT sent by starknet, the cal will revert 
         starknetCore.consumeMessageFromL2(l2Evaluator, payload);
+       
         // Firing an event, for fun
         emit MessageReceived(message);
+
         // Crediting points to the player, on L2
-        // We send back a message to L2!
         // Creating the payload
-        uint256[] memory payload2 = new uint256[](1);
+        uint256[] memory payload2 = new uint256[](2);
         // Adding player address on L2
         payload2[0] = player_l2_address;
-        starknetCore.sendMessageToL2(l2Evaluator, ex02_b_selector, payload2);
+        // Adding exercice number
+        payload2[1] = 2;
+        // Sending the message
+        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
     }
 
     function ex04ReceiveMessageFromAnL2Contract(uint256 player_l2_address, uint256 message) external {
         // Receiving a message from an L2 contract
         // To collect points, you need to deploy an L2 contract that uses send_message_to_l1_syscall() correctly.
-        // The L2 evaluator will credit point if and only if it receives a properly formatted message with:
-        // - The L2 player address, to whom points will be credited
-        // - The L1 address that will trigger this function
-        // - A message
+        // To validate this exercice, you need to:
+        // - Deploy an L2 contract that uses send_message_to_l1_syscall()
+        // - Use that L2 contract to send a message to this contract on L1
+        // - Call this function on L1 to consume the message. Be careful, the address from which you trigger this function matters!
+        // - This function will then send back a message to L2 to credit points on player_l2_address
 
+        // Consuming the message
         // Reconstructing the payload of the message we want to consume
         uint256[] memory payload = new uint256[](3);
         // Adding the address of the player on L2
@@ -87,48 +100,61 @@ contract Evaluator is Ownable {
         payload[1] = uint256(uint160(msg.sender));
         // Adding the message
         payload[2] = message;
-        // Consuming the message
         // If the message constructed above was indeed sent by starknet, this returns the hash of the message
         // If the message was NOT sent by starknet, the cal will revert 
         starknetCore.consumeMessageFromL2(l2Evaluator, payload);
+        
         // Crediting points to the player, on L2
-        // We send back a message to L2!
         // Creating the payload
-        uint256[] memory payload2 = new uint256[](1);
+        uint256[] memory payload2 = new uint256[](2);
         // Adding player address on L2
         payload2[0] = player_l2_address;
-        starknetCore.sendMessageToL2(l2Evaluator, ex04_b_selector, payload2);
+        // Adding exercice number
+        payload2[1] = 4;
+        // Sending the message
+        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
 
     }
 
-    function ex05SendMessageToAnL2CustomContract() external {
+    function ex05SendMessageToAnL2CustomContract(uint256 playerL2MessageReceiver, uint256 functionSelector, uint256 player_l2_address) external {
         // Sending a message to a custom L2 contract
         // To collect points, you need to deploy an L2 contract that includes an l1 handler that can receive messages from L1.
+        // To get point on this exercice you need to
+        // - Deploy an L2 contract that will receive message sent from this function
+        // - Call this function on L1
+        // - A message is sent to your contract, as well as to the evaluator
+        // - On L2, you call the evaluator to show that both values match
+        // In order to call this function you need to specify:
+        // - The address of your receiver contract on L2
+        // - The function selector of your l1 handler in your L2 contract
+        // - The L2 wallet on which you want to collect points
 
-        // Reconstructing the payload of the message we want to consume
-        uint256[] memory payload = new uint256[](3);
-        // Adding the address of the player on L2
-        payload[0] = player_l2_address;
-        // Adding the address of the player on L1
-        payload[1] = uint256(uint160(msg.sender));
-        // Adding the message
-        payload[2] = message;
-        // Consuming the message
-        // If the message constructed above was indeed sent by starknet, this returns the hash of the message
-        // If the message was NOT sent by starknet, the cal will revert 
-        starknetCore.consumeMessageFromL2(l2Evaluator, payload);
-        // Crediting points to the player, on L2
-        // We send back a message to L2!
-        // Creating the payload
-        uint256[] memory payload2 = new uint256[](1);
-        // Adding player address on L2
-        payload2[0] = player_l2_address;
-        starknetCore.sendMessageToL2(l2Evaluator, ex04_b_selector, payload2);
+        // Creating an arbitrary random value
+        uint256 rand_value = uint160(
+            uint256(
+                keccak256(abi.encodePacked(block.prevrandao, block.timestamp))
+            )
+        );
+       
+        // Sending a message to you l2 contract
+        uint256[] memory payload_receiver = new uint256[](1);
+        payload_receiver[0] = rand_value;
+        starknetCore.sendMessageToL2(
+            playerL2MessageReceiver,
+            functionSelector,
+            payload_receiver
+        );
 
+        // Sending a message to the evaluator 
+        uint256[] memory payload_evaluator = new uint256[](3);
+        payload_evaluator[0] = playerL2MessageReceiver;
+        payload_evaluator[1] = rand_value;
+        payload_evaluator[2] = player_l2_address;
+        starknetCore.sendMessageToL2(l2Evaluator, ex05b_selector, payload_evaluator);
     }
 
-    function ex06ReceiveMessageFromAnL2CustomContract(address playerMessageReceiver, uint256 player_l2_address) external {
-        // Receiving a message to a custom L2 contract
+    function ex06ReceiveMessageFromAnL2CustomContract(address playerL1MessageReceiver, uint256 player_l2_address) external {
+        // Receiving a message from L2 on a custom L1 contract
         // To collect points, you need to deploy an L1 contract that is able to consume a message from L2
         // Step by step:
         // - Deploy an L1 contract that can consume messages from L2. 
@@ -139,14 +165,14 @@ contract Evaluator is Ownable {
         // - Points are sent back to your account contract on L2
 
         // Connecting to the player's L1 contract        
-        ISolution playerSolution = ISolution(playerMessageReceiver);
+        ISolution playerSolution = ISolution(playerL1MessageReceiver);
         // Calculating the message Hash
         uint256[] memory payload = new uint256[](1);
         payload[0] = player_l2_address;
         bytes32 msgHash = keccak256(
             abi.encodePacked(
                 l2Evaluator, // Who sent the message
-                uint256(uint160(playerMessageReceiver)), // To whom was it sent
+                uint256(uint160(playerL1MessageReceiver)), // To whom was it sent
                 payload.length, // Data length
                 payload // Data
             )
@@ -164,11 +190,13 @@ contract Evaluator is Ownable {
         );
         // Crediting points on L2
         // Building the payload
-        uint256[] memory payload2 = new uint256[](1);
+        uint256[] memory payload2 = new uint256[](2);
         // Adding player address on L2
         payload2[0] = player_l2_address;
+        // Adding exercice number
+        payload2[1] = 6;
         // Sending the message
-        starknetCore.sendMessageToL2(l2Evaluator, ex06_b_selector, payload2);
+        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
     }
 
     ////////////////////////////////
@@ -182,14 +210,10 @@ contract Evaluator is Ownable {
     function setEx01Selector(uint256 ex01_selector_) external onlyOwner {
         ex01_selector = ex01_selector_;
     }
-    function setEx02BSelector(uint256 ex02_b_selector_) external onlyOwner {
-        ex02_b_selector = ex02_b_selector_;
+    function setEx05bSelector(uint256 ex05b_selector_) external onlyOwner {
+        ex05b_selector = ex05b_selector_;
     }
-    function setEx04BSelector(uint256 ex04_b_selector_) external onlyOwner {
-        ex04_b_selector = ex04_b_selector_;
+    function setGenericValidatorSelector(uint256 genericValidatorSelector_) external onlyOwner {
+        genericValidatorSelector = genericValidatorSelector_;
     }
-    function setEx06BSelector(uint256 ex06_b_selector_) external onlyOwner {
-        ex06_b_selector = ex06_b_selector_;
-    }
-
 }

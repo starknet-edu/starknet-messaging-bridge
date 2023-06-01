@@ -79,16 +79,6 @@ mod Evaluator{
     }
 
     #[l1_handler]
-    fn ex_02_b(from_address: felt252, player_l2_address: ContractAddress)
-    {
-    // Check that the sender is the correct L1 evaluator
-    assert(from_address == l1_evaluator_address::read(), 'WRONG L1 EVALUATOR');
-    // Credit points to the users and validate exercise
-    distribute_points(player_l2_address, 2);
-    validate_exercise(player_l2_address, 2_u128);
-    }
-
-    #[l1_handler]
     fn ex_03_receive_message_from_l1_contract(from_address: felt252, player_l2_address: ContractAddress)
     {
     // This function can only be triggered by sending a message from L1.
@@ -100,6 +90,27 @@ mod Evaluator{
     // Credit points to the users and validate exercise
     distribute_points(player_l2_address, 2);
     validate_exercise(player_l2_address, 3_u128);
+    }
+
+    #[l1_handler]
+    fn ex_05_receive_message_on_an_l2_contract(from_address: felt252, player_l2_receiver: ContractAddress, rand_value: felt252, player_l2_address: ContractAddress)
+    {
+    // Check that the sender is the correct L1 evaluator
+    assert(from_address == l1_evaluator_address::read(), 'WRONG L1 EVALUATOR');
+
+    // Credit points to the users and validate exercise
+    distribute_points(player_l2_address, 2);
+    validate_exercise(player_l2_address, 5_u128);
+    }
+
+    #[l1_handler]
+    fn validate_from_l1(from_address: felt252, player_l2_address: ContractAddress, exercice_number: u128)
+    {
+    // Check that the sender is the correct L1 evaluator
+    assert(from_address == l1_evaluator_address::read(), 'WRONG L1 EVALUATOR');
+    // Credit points to the users and validate exercise
+    distribute_points(player_l2_address, 2);
+    validate_exercise(player_l2_address, exercice_number);
     }
 
     ////////////////////////////////
