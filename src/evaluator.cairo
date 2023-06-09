@@ -25,6 +25,9 @@ mod Evaluator{
     use starknet_messaging_bridge::utils::ex00_base::Ex00Base::validate_exercise;
     use starknet_messaging_bridge::utils::ex00_base::Ex00Base::ex_initializer;
     use starknet_messaging_bridge::utils::ex00_base::Ex00Base::update_class_hash_by_admin;
+    use starknet_messaging_bridge::utils::ex00_base::Ex00Base::players_registry;
+    use starknet_messaging_bridge::utils::Iplayers_registry::Iplayers_registryDispatcherTrait;
+    use starknet_messaging_bridge::utils::Iplayers_registry::Iplayers_registryDispatcher;
     use starknet_messaging_bridge::utils::helper;
     use starknet_messaging_bridge::IEx05_receiver::IEx05_receiverDispatcherTrait;
     use starknet_messaging_bridge::IEx05_receiver::IEx05_receiverDispatcher;
@@ -68,6 +71,7 @@ mod Evaluator{
     #[l1_handler]
     fn ex_01_receive_message_from_l1(from_address: felt252, player_l2_address: ContractAddress, player_l1_address: usize, message: usize)
     {
+    // Selector: 0x274ab8abc4e270a94c36e1a54c794cd4dd537eeee371e7188c56ee768c4c0c4
     // Check that the sender is the correct L1 evaluator
     assert(from_address == l1_evaluator_address::read(), 'WRONG L1 EVALUATOR');
     // Adding a check on the message, because why not?
@@ -83,6 +87,7 @@ mod Evaluator{
     #[l1_handler]
     fn ex_03_receive_message_from_l1_contract(from_address: felt252, player_l2_address: ContractAddress)
     {
+    // Selector: 0x92d55394e14620606cc8c623ce613f707656dad186f130361aa9ab37638129
     // This function can only be triggered by sending a message from L1.
     // from_address is the L1 address that sent the message to starknet core
     // player_l2_address is the l2 address to whom points will be credited
@@ -97,6 +102,7 @@ mod Evaluator{
     #[l1_handler]
     fn ex_05_receive_message_on_an_l2_contract(from_address: felt252, player_l2_receiver: ContractAddress, rand_value: usize, player_l2_address: ContractAddress)
     {
+    // Selector: 0x12db22b429341580131c6b522a5c9f6332d59b08a0077777b46e2e0d1ea3a92
     // Sending a message to a custom L2 contract
     // To collect points, you need to deploy an L2 contract that includes an l1 handler that can receive messages from L1.
     // To get point on this exercice you need to
@@ -121,6 +127,7 @@ mod Evaluator{
     #[l1_handler]
     fn validate_from_l1(from_address: felt252, player_l2_address: ContractAddress, exercice_number: u128)
     {
+    // Selector: 0x1dc98f1a6c797f34828d0049700af70c9c1d28442d6ae5d2fa1732d773ddf1a
     // Check that the sender is the correct L1 evaluator
     assert(from_address == l1_evaluator_address::read(), 'WRONG L1 EVALUATOR');
     // Credit points to the users and validate exercise
@@ -185,7 +192,13 @@ mod Evaluator{
 
     #[external]
     fn update_l1_evaluator_address(_l1_evaluator_address: felt252) {
-        
+        let players_registry = players_registry();
+        let sender_address = get_caller_address();
+
+        let is_admin = Iplayers_registryDispatcher{contract_address: players_registry}
+            .is_exercise_or_admin(sender_address);
+
+        assert(is_admin, 'CALLER_NO_ADMIN_RIGHTS');
         l1_evaluator_address::write(_l1_evaluator_address);
     }
 
