@@ -35,6 +35,7 @@ contract Evaluator is Ownable {
         // Sending a message to L2
         // To validate this exercice, you need to successfully call this function on L1
         // It will then send a message to the evaluator on L2, which will credit you points.
+        // Be careful! There is a constraint on the value of "message". Check out the L2 evaluator to find out which...
 
         // Sending the message to the evaluator
         // Creating the payload
@@ -62,7 +63,10 @@ contract Evaluator is Ownable {
         // Adding the address of the player on L2
         payload[0] = player_l2_address;
         // Adding the message
-        payload[2] = message;
+        payload[1] = message;
+        // Adding a constraint on the message, to make sure players read BOTH contracts ;-)
+        require(message>3121906, 'Message too small');
+        require(message<4230938, 'Message too big');
 
         // If the message constructed above was indeed sent by starknet, this returns the hash of the message
         // If the message was NOT sent by starknet, the cal will revert 
@@ -82,27 +86,26 @@ contract Evaluator is Ownable {
         starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
     }
 
-    function ex04ReceiveMessageFromAnL2Contract(uint256 player_l2_address, uint256 message) external {
+    function ex04ReceiveMessageFromAnL2Contract(uint256 player_l2_address, uint256 player_l2_contract) external {
         // Receiving a message from an L2 contract
         // To collect points, you need to deploy an L2 contract that uses send_message_to_l1_syscall() correctly.
         // To validate this exercice, you need to:
-        // - Deploy an L2 contract that uses send_message_to_l1_syscall()
+        // - Deploy an L2 contract (address player_l2_contract) that uses send_message_to_l1_syscall()
         // - Use that L2 contract to send a message to this contract on L1
         // - Call this function on L1 to consume the message. Be careful, the address from which you trigger this function matters!
         // - This function will then send back a message to L2 to credit points on player_l2_address
 
         // Consuming the message
         // Reconstructing the payload of the message we want to consume
-        uint256[] memory payload = new uint256[](3);
-        // Adding the address of the player on L2
+        uint256[] memory payload = new uint256[](2);
+        // Adding the address of the player account on L2
         payload[0] = player_l2_address;
-        // Adding the address of the player on L1
+        // Adding the address of the player on L1. This means the L1->L2 message needs to specify
+        // which EOA is going to trigger this function
         payload[1] = uint256(uint160(msg.sender));
-        // Adding the message
-        payload[2] = message;
         // If the message constructed above was indeed sent by starknet, this returns the hash of the message
         // If the message was NOT sent by starknet, the cal will revert 
-        starknetCore.consumeMessageFromL2(l2Evaluator, payload);
+        starknetCore.consumeMessageFromL2(player_l2_contract, payload);
         
         // Crediting points to the player, on L2
         // Creating the payload
@@ -164,6 +167,8 @@ contract Evaluator is Ownable {
         // - Call this function ex05ReceiveMessageFromAnL2CustomContract to trigger the message consumption on your contract
         // - Points are sent back to your account contract on L2
 
+        // No shenanigans, checking that player's contract is not the evaluator :) 
+        require(playerL1MessageReceiver != address(this));
         // Connecting to the player's L1 contract        
         ISolution playerSolution = ISolution(playerL1MessageReceiver);
         // Calculating the message Hash
