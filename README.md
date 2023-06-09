@@ -86,7 +86,7 @@ L2 -> L1 communication takes ~30 mins so it is recommended to complete the L2 ->
 ### Checking your progress & counting your points
 
 ​
-Your points will get credited in your wallet! Add token XX and check from time to time.
+Your points will get credited in your wallet! Add token `0x031d9e05ec67956acfec4768f7b302a56f8a256686fa077594f6dde40d5ca04c` and check from time to time.
 ​
 
 ### Articles & documentation
