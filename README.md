@@ -13,7 +13,7 @@ It is aimed at developers that:
 
 The goal of this tutorial is for you to create and deploy contracts on StarkNet and Ethereum that will interact with each other. In other words, you will create your own L1 <-> L2 bridge.
 
-Your progress will be check by an [evaluator contract](src/evaluator.cairo), deployed on StarkNet, which will grant you points in the form of [ERC20 tokens](src/token/TDERC20.cairo).
+Your progress will be check by an [evaluator contract](src/evaluator.cairo), deployed on StarkNet, which will grant you points in the form of [ERC20 tokens](src/token/TDERC20.cairo), deployed at address `0x031d9e05ec67956acfec4768f7b302a56f8a256686fa077594f6dde40d5ca04c`.
 
 Another evaluator is deployed on L1 ([evaluator contract](contracts/Evaluator.sol)). It will check your work on L1, and send back instructions to the L2 evaluator to credit you points on L2.
 
@@ -33,7 +33,7 @@ Each exercise will allow you to explore the Starknet messaging bridge in a step 
 
 ### Evaluators addresses
 - The L2 Evaluator is accessible on [Starkscan](https://testnet.starkscan.co/contract/0x0455c60bbd52b3b57076a0180e7588df61046366ad5a48bc277c974518f837c4) or [Voyager](https://goerli.voyager.online/contract/0x04732b911740d44f8916db5e49ad3cb20aa2969afc942923eed04bf185738636) at address `0x0455c60bbd52b3b57076a0180e7588df61046366ad5a48bc277c974518f837c4`
-- The L1 evaluator is accessible on [Etherscan](https://goerli.etherscan.io/address/0x4498338875ebfe75a0124adbffdc86be8a578f65) at address `0x4498338875ebfe75a0124adbffdc86be8a578f65`
+- The L1 evaluator is accessible on [Etherscan](https://goerli.etherscan.io/address/0x94210fB83a2C1e548add07026DaA294a440Ae86d) at address `0x94210fB83a2C1e548add07026DaA294a440Ae86d`
 
 ## Working on the tutorial
 L2 -> L1 communication takes ~30 mins so it is recommended to complete the L2 -> L1 part with care, and then start working on the next exercice while the message is passed.
