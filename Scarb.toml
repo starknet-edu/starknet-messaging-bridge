@@ -1,0 +1,10 @@
+[package]
+name = "starknet_messaging_bridge"
+version = "0.1.0"
+description = "Workshop to learn how to use Starknet's messaging bridge"
+homepage = "https://github.com/starknet-edu/starknet-messaging-bridge"
+
+
+[dependencies]
+starknet = ">=1.0.0"
+ [[target.starknet-contract]]
