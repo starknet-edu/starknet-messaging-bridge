@@ -69,7 +69,7 @@ mod Evaluator{
     // L1 handlers
     ////////////////////////////////
     #[l1_handler]
-    fn ex_01_receive_message_from_l1(from_address: felt252, player_l2_address: ContractAddress, player_l1_address: usize, message: usize)
+    fn ex_01_receive_message_from_l1(from_address: felt252, player_l2_address: ContractAddress, player_l1_address: felt252, message: usize)
     {
     // Selector: 0x274ab8abc4e270a94c36e1a54c794cd4dd537eeee371e7188c56ee768c4c0c4
     // Check that the sender is the correct L1 evaluator
@@ -80,8 +80,6 @@ mod Evaluator{
     // Credit points to the users and validate exercise
     distribute_points(player_l2_address, 2);
     validate_exercise(player_l2_address, 1_u128);
-    // Trigger an event with the user's message
-    received_something(player_l1_address, message);
     }
 
     #[l1_handler]
