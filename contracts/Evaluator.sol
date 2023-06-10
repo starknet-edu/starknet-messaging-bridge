@@ -31,11 +31,14 @@ contract Evaluator is Ownable {
     // External Functions
     ////////////////////////////////
 
-    function ex01SendMessageToL2(uint256 player_l2_address, uint256 message) external {
+    function ex01SendMessageToL2(uint256 player_l2_address, uint256 message) external payable{
         // Sending a message to L2
         // To validate this exercice, you need to successfully call this function on L1
         // It will then send a message to the evaluator on L2, which will credit you points.
         // Be careful! There is a constraint on the value of "message". Check out the L2 evaluator to find out which...
+
+        // This function call requires money to send L2 messages, we check there is enough 
+        require(msg.value>=10000000000, "Message fee missing");
 
         // Sending the message to the evaluator
         // Creating the payload
@@ -47,16 +50,18 @@ contract Evaluator is Ownable {
         // Adding player message 
         payload[2] = message;
         // Sending the message
-        starknetCore.sendMessageToL2(l2Evaluator, ex01_selector, payload);
+        starknetCore.sendMessageToL2{value: 10000000000}(l2Evaluator, ex01_selector, payload);
     }
 
-    function ex02ReceiveMessageFromL2(uint256 player_l2_address, uint256 message) external {
+    function ex02ReceiveMessageFromL2(uint256 player_l2_address, uint256 message) external payable{
         // Receiving a message from L2
         // To validate this exercice, you need to:
         // - Use the evaluator on L2 to send a message to this contract on L1
         // - Call this function on L1 to consume the message 
         // - This function will then send back a message to L2 to credit points on player_l2_address
 
+        // This function call requires money to send L2 messages, we check there is enough 
+        require(msg.value>=10000000000, "Message fee missing");
         // Consuming the message 
         // Reconstructing the payload of the message we want to consume
         uint256[] memory payload = new uint256[](2);
@@ -82,11 +87,11 @@ contract Evaluator is Ownable {
         payload2[0] = player_l2_address;
         // Adding exercice number
         payload2[1] = 2;
-        // Sending the message
-        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
+        // Sending the message, with 0.00000001eth fee. Be sure to include it in your call!
+        starknetCore.sendMessageToL2{value: 10000000000}(l2Evaluator, genericValidatorSelector, payload2);
     }
 
-    function ex04ReceiveMessageFromAnL2Contract(uint256 player_l2_address, uint256 player_l2_contract) external {
+    function ex04ReceiveMessageFromAnL2Contract(uint256 player_l2_address, uint256 player_l2_contract) external payable {
         // Receiving a message from an L2 contract
         // To collect points, you need to deploy an L2 contract that uses send_message_to_l1_syscall() correctly.
         // To validate this exercice, you need to:
@@ -95,6 +100,8 @@ contract Evaluator is Ownable {
         // - Call this function on L1 to consume the message. Be careful, the address from which you trigger this function matters!
         // - This function will then send back a message to L2 to credit points on player_l2_address
 
+        // This function call requires money to send L2 messages, we check there is enough 
+        require(msg.value>=10000000000, "Message fee missing");
         // Consuming the message
         // Reconstructing the payload of the message we want to consume
         uint256[] memory payload = new uint256[](2);
@@ -115,11 +122,11 @@ contract Evaluator is Ownable {
         // Adding exercice number
         payload2[1] = 4;
         // Sending the message
-        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
+        starknetCore.sendMessageToL2{value: 10000000000}(l2Evaluator, genericValidatorSelector, payload2);
 
     }
 
-    function ex05SendMessageToAnL2CustomContract(uint256 playerL2MessageReceiver, uint256 functionSelector, uint256 player_l2_address) external {
+    function ex05SendMessageToAnL2CustomContract(uint256 playerL2MessageReceiver, uint256 functionSelector, uint256 player_l2_address) external payable{
         // Sending a message to a custom L2 contract
         // To collect points, you need to deploy an L2 contract that includes an l1 handler that can receive messages from L1.
         // To get point on this exercice you need to
@@ -132,6 +139,8 @@ contract Evaluator is Ownable {
         // - The function selector of your l1 handler in your L2 contract
         // - The L2 wallet on which you want to collect points
 
+        // This function call requires money to send L2 messages, we check there is enough 
+        require(msg.value>=20000000000, "Message fee missing");
         // Creating an arbitrary random value
         uint256 rand_value = uint160(
             uint256(
@@ -142,7 +151,7 @@ contract Evaluator is Ownable {
         // Sending a message to you l2 contract
         uint256[] memory payload_receiver = new uint256[](1);
         payload_receiver[0] = rand_value;
-        starknetCore.sendMessageToL2(
+        starknetCore.sendMessageToL2{value: 10000000000}(
             playerL2MessageReceiver,
             functionSelector,
             payload_receiver
@@ -153,10 +162,10 @@ contract Evaluator is Ownable {
         payload_evaluator[0] = playerL2MessageReceiver;
         payload_evaluator[1] = rand_value;
         payload_evaluator[2] = player_l2_address;
-        starknetCore.sendMessageToL2(l2Evaluator, ex05b_selector, payload_evaluator);
+        starknetCore.sendMessageToL2{value: 10000000000}(l2Evaluator, ex05b_selector, payload_evaluator);
     }
 
-    function ex06ReceiveMessageFromAnL2CustomContract(address playerL1MessageReceiver, uint256 player_l2_address) external {
+    function ex06ReceiveMessageFromAnL2CustomContract(address playerL1MessageReceiver, uint256 player_l2_address) external payable{
         // Receiving a message from L2 on a custom L1 contract
         // To collect points, you need to deploy an L1 contract that is able to consume a message from L2
         // Step by step:
@@ -167,6 +176,8 @@ contract Evaluator is Ownable {
         // - Call this function ex05ReceiveMessageFromAnL2CustomContract to trigger the message consumption on your contract
         // - Points are sent back to your account contract on L2
 
+        // This function call requires money to send L2 messages, we check there is enough 
+        require(msg.value>=10000000000, "Message fee missing");
         // No shenanigans, checking that player's contract is not the evaluator :) 
         require(playerL1MessageReceiver != address(this));
         // Connecting to the player's L1 contract        
@@ -201,7 +212,7 @@ contract Evaluator is Ownable {
         // Adding exercice number
         payload2[1] = 6;
         // Sending the message
-        starknetCore.sendMessageToL2(l2Evaluator, genericValidatorSelector, payload2);
+        starknetCore.sendMessageToL2{value: 10000000000}(l2Evaluator, genericValidatorSelector, payload2);
     }
 
     ////////////////////////////////
