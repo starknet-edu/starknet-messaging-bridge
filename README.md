@@ -1,3 +1,10 @@
+# DISCLAIMER
+Hello Starknet community, this repository is not updated with the latest Cairo syntax and hence, we do not recommend to attempt this tutorial as of today. If you are interested in contributing to the repository to update the tutorial, please create a PR and tag me @gyan0890 on it and we will be happy to support you with the process.
+
+A great resource to get you up to speed with the new Cairo syntax in a Starknet context is [Chapter 2 of the Starknet Book](https://book.starknet.io/chapter_2/index.html).
+
+You can also ping me(@gyanlakshmi) on Telegram to help you assign the right tasks.
+
 # StarkNet messaging bridge
 
 Welcome! This is an automated workshop that will explain how to use the StarkNet L1 <-> L2 messaging bridge to create powerful cross layer applications.
